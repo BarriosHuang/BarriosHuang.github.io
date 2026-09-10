@@ -1,34 +1,1856 @@
 <!DOCTYPE html>
-<html lang="zh">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>The Work of Days · 日课塔罗</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Work of Days · Tarot for Self-Reflection · 日课塔罗</title>
 <style>
-body{margin:0;background:#13110e;color:#ece3d4;font-family:Georgia,'Noto Serif SC',serif;line-height:1.7}
-.wrap{max-width:640px;margin:0 auto;padding:48px 22px 80px}
-h1{font-weight:300;font-size:36px;letter-spacing:-.02em}
-h1 em{font-style:italic;color:#c9a227}
-.k{font-family:ui-monospace,monospace;font-size:11px;letter-spacing:.28em;text-transform:uppercase;color:#c9a227}
-p{color:#b3a890}
-a{color:#c9a227}
-code{font-family:ui-monospace,monospace;font-size:13px;background:#211d17;padding:2px 6px;border-radius:4px}
-ol{color:#ece3d4;padding-left:1.2em}
-li{margin:10px 0}
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;0,9..144,600;1,9..144,400&family=Noto+Serif+SC:wght@300;400;600&family=Spline+Sans+Mono:wght@400;500&display=swap');
+
+:root{
+  --bg:#13110e; --bg2:#1b1813; --panel:#211d17; --panel2:#2a251d;
+  --ink:#ece3d4; --ink-dim:#b3a890; --line:#3a3328; --gold:#c9a227;
+  --ex:#c45c3a; --in:#d4a017; --rb:#2e9e7f; --st:#4a6cc4; --shadow-violet:#7d6ca8;
+  --serif:'Fraunces',Georgia,serif; --sc:'Noto Serif SC',serif; --mono:'Spline Sans Mono',monospace;
+}
+*{box-sizing:border-box; margin:0; padding:0}
+body{
+  background:
+   radial-gradient(900px 600px at 85% -5%, rgba(201,162,39,.08), transparent 60%),
+   radial-gradient(700px 500px at 0% 100%, rgba(74,108,196,.05), transparent 55%),
+   var(--bg);
+  color:var(--ink); font-family:var(--serif); line-height:1.65;
+  min-height:100vh; -webkit-font-smoothing:antialiased;
+}
+body.zh{font-family:var(--sc); line-height:1.85;}
+body::before{
+  content:""; position:fixed; inset:0; pointer-events:none; z-index:1; opacity:.04;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+.wrap{max-width:880px; margin:0 auto; padding:34px 22px 80px; position:relative; z-index:2;}
+
+header.mast{border-bottom:1px solid var(--line); padding-bottom:24px; margin-bottom:26px;}
+.kicker{font-family:var(--mono); font-size:11px; letter-spacing:.32em; text-transform:uppercase; color:var(--gold);}
+h1.title{font-weight:300; font-size:clamp(30px,5.5vw,46px); line-height:1.04; letter-spacing:-.02em; margin:10px 0 6px;}
+h1.title em{font-style:italic; color:var(--gold);}
+.zh-sub{font-family:var(--sc); font-size:14px; color:var(--ink-dim); margin-top:4px;}
+.sub{color:var(--ink-dim); font-size:14.5px; max-width:62ch; margin-top:10px;}
+
+.langtoggle{
+  position:fixed; top:14px; right:14px; z-index:30; display:flex;
+  border:1px solid var(--line); border-radius:30px; overflow:hidden;
+  background:var(--panel); font-family:var(--mono); font-size:12px;
+}
+.langtoggle button{background:none; border:none; color:var(--ink-dim); padding:7px 14px; cursor:pointer; letter-spacing:.05em;}
+.langtoggle button.on{background:var(--gold); color:#1a1710; font-weight:500;}
+
+.card{
+  background:linear-gradient(180deg,var(--panel),var(--bg2));
+  border:1px solid var(--line); border-radius:14px; padding:26px;
+  margin-bottom:20px; box-shadow:0 18px 40px -28px rgba(0,0,0,.8);
+}
+.card h2{font-weight:400; font-size:24px; margin:4px 0 8px; letter-spacing:-.01em;}
+.zh-h{font-family:var(--sc); font-size:14.5px; color:var(--ink-dim); margin-bottom:16px; line-height:1.75;}
+.eyebrow{font-family:var(--mono); font-size:11px; letter-spacing:.2em; text-transform:uppercase; color:var(--gold); margin-bottom:6px;}
+
+textarea{
+  width:100%; background:var(--bg); border:1px solid var(--line); color:var(--ink);
+  font-family:var(--serif); font-size:15px; line-height:1.6; padding:14px;
+  border-radius:10px; resize:vertical; min-height:90px; margin:14px 0;
+}
+body.zh textarea{font-family:var(--sc);}
+textarea:focus{outline:none; border-color:var(--gold);}
+
+.btn{
+  display:inline-flex; align-items:center; gap:9px; background:var(--gold); color:#1a1710;
+  border:none; font-family:var(--serif); font-weight:500; font-size:15px;
+  padding:12px 24px; border-radius:30px; cursor:pointer; letter-spacing:.01em;
+  transition:transform .15s, box-shadow .15s;
+}
+.btn:hover{transform:translateY(-2px); box-shadow:0 12px 28px -12px var(--gold);}
+.btn.ghost{background:none; border:1px solid var(--line); color:var(--ink);}
+.btn.ghost:hover{border-color:var(--gold);}
+
+/* SPREAD SELECTION */
+.spread-section{margin:24px 0 8px;}
+.spread-grid{display:grid; grid-template-columns:repeat(auto-fit, minmax(220px, 1fr)); gap:10px; margin-top:10px;}
+.spread-card{
+  background:var(--bg); border:1px solid var(--line); color:var(--ink); text-align:left;
+  padding:14px; border-radius:11px; cursor:pointer; font-family:inherit;
+  transition:.15s; display:flex; flex-direction:column; gap:5px;
+}
+.spread-card:hover{border-color:var(--gold);}
+.spread-card.sel{border-color:var(--gold); background:rgba(201,162,39,.08);}
+.sp-cards{font-family:var(--mono); color:var(--gold); font-size:13px; letter-spacing:2px;}
+.sp-name{font-size:15px; font-weight:500;}
+.sp-intent{font-size:12.5px; color:var(--ink-dim); line-height:1.55;}
+
+/* PHILO INTRO CARD */
+.philo p{font-size:14px; color:var(--ink-dim); margin-bottom:10px; line-height:1.7;}
+
+/* SHUFFLE & DRAW PHASE */
+.intent-recall{
+  background:rgba(201,162,39,.06); border-left:3px solid var(--gold);
+  padding:10px 14px; margin:14px 0; border-radius:0 8px 8px 0;
+}
+.ir-label{font-family:var(--mono); font-size:10px; letter-spacing:.14em; text-transform:uppercase; color:var(--gold); margin-bottom:3px;}
+.ir-body{font-size:14px; font-style:italic; color:var(--ink);}
+
+.cards-row{
+  display:flex; justify-content:center; gap:18px; flex-wrap:wrap;
+  padding:30px 0; margin:14px -8px;
+}
+.card-slot{
+  display:flex; flex-direction:column; align-items:center; gap:8px;
+  min-width:110px; max-width:140px;
+}
+.slot-label{text-align:center; margin-bottom:4px;}
+.slot-num{
+  font-family:var(--mono); color:var(--gold); font-size:11px;
+  background:rgba(201,162,39,.1); border:1px solid var(--gold); border-radius:50%;
+  width:22px; height:22px; line-height:20px; display:inline-block;
+}
+.slot-name{font-size:12px; color:var(--ink-dim); margin-top:3px; font-family:var(--mono);}
+
+.card-img{
+  width:110px; height:176px; cursor:pointer; transition:transform .4s, box-shadow .3s;
+  position:relative; transform-style:preserve-3d;
+}
+.card-img:hover{transform:translateY(-4px); box-shadow:0 16px 32px -16px rgba(201,162,39,.5);}
+.card-img.reversed.revealed > .card-face{transform:rotate(180deg);}
+.card-img svg{width:100%; height:auto; display:block;}
+.card-back, .card-face{width:100%;}
+.card-face{
+  background:linear-gradient(180deg, var(--panel), var(--bg2));
+  border-radius:6px; border:2px solid; padding-bottom:24px; position:relative;
+  transition:transform .4s;
+}
+.card-label{
+  position:absolute; bottom:6px; left:50%; transform:translateX(-50%);
+  font-size:11px; font-weight:500; font-family:var(--serif); text-align:center; width:90%;
+}
+.card-img.reversed .card-label{transform:translateX(-50%) rotate(180deg);}
+.slot-orient{
+  font-family:var(--mono); font-size:10px; letter-spacing:.1em;
+  color:var(--gold); margin-top:4px;
+}
+.hint{
+  text-align:center; color:var(--ink-dim); font-style:italic;
+  margin-top:20px; font-size:13.5px;
+}
+
+/* READING PHASE */
+.reading-card{padding-left:30px;}
+.rc-position{
+  display:flex; align-items:center; gap:10px; flex-wrap:wrap;
+  font-family:var(--mono); font-size:11px; margin-bottom:8px;
+}
+.rc-num{
+  background:var(--gold); color:#1a1710; padding:2px 9px; border-radius:12px;
+  font-weight:600; letter-spacing:.05em;
+}
+.rc-pos-name{color:var(--ink-dim); letter-spacing:.16em; text-transform:uppercase;}
+.rc-orient{
+  margin-left:auto; padding:3px 10px; border-radius:12px;
+  background:rgba(201,162,39,.1); color:var(--gold); letter-spacing:.1em;
+}
+.rc-orient.reversed{background:rgba(125,108,168,.15); color:var(--shadow-violet);}
+
+.rc-title{font-size:26px; font-weight:400; color:var(--ink); margin:4px 0;}
+.rc-archetype{
+  font-family:var(--sc); font-style:italic; color:var(--gold);
+  font-size:14px; margin-bottom:14px; letter-spacing:.02em;
+}
+.rc-position-prompt{
+  font-style:italic; color:var(--ink-dim); font-size:14px;
+  border-left:2px solid var(--line); padding-left:14px; margin:10px 0 16px;
+}
+.rc-main{
+  font-size:15.5px; line-height:1.75; color:var(--ink); margin-bottom:18px;
+}
+body.zh .rc-main{font-size:15px; line-height:1.9;}
+
+.rc-shadow-toggle{
+  margin:16px 0; border:1px solid var(--line); border-radius:9px;
+  background:rgba(125,108,168,.04);
+}
+.rc-shadow-toggle summary{
+  padding:10px 14px; cursor:pointer; color:var(--shadow-violet);
+  font-family:var(--mono); font-size:12px; letter-spacing:.08em;
+  list-style:none; outline:none;
+}
+.rc-shadow-toggle summary::-webkit-details-marker{display:none;}
+.rc-shadow-toggle summary::before{content:"▸ "; color:var(--shadow-violet);}
+.rc-shadow-toggle[open] summary::before{content:"▾ ";}
+.rc-shadow-body{padding:0 14px 14px; color:var(--ink-dim); font-size:14px; line-height:1.7;}
+
+.rc-meta{
+  display:flex; flex-direction:column; gap:6px; margin:14px 0;
+  padding:12px 14px; background:var(--bg); border-radius:8px;
+  border:1px solid var(--line);
+}
+.rc-meta-row{display:flex; gap:14px; font-size:13px;}
+.rc-meta-k{
+  font-family:var(--mono); font-size:10.5px; letter-spacing:.14em;
+  text-transform:uppercase; color:var(--gold); min-width:120px;
+}
+.rc-meta-v{color:var(--ink-dim);}
+
+.rc-question{
+  background:rgba(46,158,127,.08); border-left:3px solid var(--rb);
+  padding:12px 16px; margin:16px 0 12px; border-radius:0 9px 9px 0;
+}
+.rc-q-label{font-family:var(--mono); font-size:10.5px; letter-spacing:.14em; text-transform:uppercase; color:var(--rb); margin-bottom:4px;}
+.rc-q-body{font-size:15px; color:var(--ink); font-style:italic; line-height:1.6;}
+
+.rc-mantra{
+  text-align:center; font-family:var(--serif); font-style:italic;
+  font-size:18px; color:var(--gold); margin:14px 0 0;
+  letter-spacing:.01em; padding:10px;
+}
+body.zh .rc-mantra{font-family:var(--sc);}
+
+/* SYNTHESIS */
+.synthesis h2{font-size:22px;}
+.syn-block{margin:16px 0;}
+.syn-head{
+  font-family:var(--mono); font-size:11.5px; letter-spacing:.16em;
+  text-transform:uppercase; color:var(--gold); margin-bottom:6px;
+}
+.syn-block p{font-size:15px; line-height:1.7; color:var(--ink);}
+body.zh .syn-block p{font-size:14.5px; line-height:1.85;}
+
+.shadow-block{
+  background:rgba(125,108,168,.06); border-left:3px solid var(--shadow-violet);
+  padding:14px 18px; border-radius:0 10px 10px 0;
+}
+.shadow-block .syn-head{color:var(--shadow-violet);}
+.syn-body p{margin-bottom:10px;}
+
+.values-block{
+  background:rgba(74,108,196,.06); border-left:3px solid var(--st);
+  padding:14px 18px; border-radius:0 10px 10px 0;
+}
+.values-block .syn-head{color:var(--st);}
+
+.closing p{font-size:15px; color:var(--ink-dim); margin-bottom:12px; line-height:1.7;}
+.closing p.quiet{font-style:italic; font-size:14px;}
+
+footer{
+  margin-top:42px; border-top:1px solid var(--line); padding-top:20px;
+  color:var(--ink-dim); font-size:12.5px;
+}
+.note{font-family:var(--mono); font-size:11px; line-height:1.75;}
+
+@media print{
+  .langtoggle, .btn, textarea{display:none !important;}
+  body{background:#fff; color:#111;}
+  .card{break-inside:avoid; box-shadow:none;}
+}
+
+.chiprow{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0 4px}
+.chip{font-family:var(--mono);font-size:11px;letter-spacing:.06em;padding:5px 10px;border-radius:20px;border:1px solid var(--line);color:var(--ink-dim);background:var(--bg)}
+.chip.hot{border-color:var(--gold);color:var(--gold);background:rgba(201,162,39,.08)}
+.hist-list{display:flex;flex-direction:column;gap:8px;margin-top:10px}
+.hist-item{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;padding:10px 12px;border:1px solid var(--line);border-radius:10px;background:var(--bg);cursor:pointer;text-align:left;color:inherit;font:inherit;width:100%}
+.hist-item:hover{border-color:var(--gold)}
+.hist-meta{font-family:var(--mono);font-size:11px;color:var(--gold);letter-spacing:.08em}
+.hist-intent{font-size:13px;color:var(--ink-dim);margin-top:3px}
+.combo-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:8px}
+@media(max-width:640px){.combo-grid{grid-template-columns:1fr}}
+.combo-cell{background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:12px 14px}
+.combo-cell h3{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);font-weight:400;margin-bottom:6px}
+.combo-cell p{font-size:13.5px;color:var(--ink-dim);line-height:1.65}
+.practice{background:rgba(201,162,39,.07);border:1px dashed var(--gold);border-radius:10px;padding:12px 14px;margin:14px 0 4px}
+.practice-k{font-family:var(--mono);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);margin-bottom:4px}
+.practice-v{font-size:14.5px;color:var(--ink)}
+.btnrow{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}
+.toast{position:fixed;bottom:22px;left:50%;transform:translateX(-50%);background:var(--gold);color:#1a1710;padding:8px 16px;border-radius:20px;font-family:var(--mono);font-size:12px;z-index:50;opacity:0;pointer-events:none;transition:opacity .25s}
+.toast.show{opacity:1}
+
 </style>
 </head>
 <body>
-<div class="wrap">
-<div class="k">Tarot × Self-Reflection</div>
-<h1>The Work of <em>Days</em></h1>
-<p>完整工具是单文件 HTML（约 177KB）。GitHub Pages 本身可以托管它；从对话里直接写入仓库的通道一次带不走整页，所以这里还不是可用的算牌页。</p>
-<p>The full tool is one 177KB HTML file. GitHub Pages can host it. The chat-to-repo upload path cannot carry the whole page in one call, so this URL is not the working app yet.</p>
-<ol>
-<li>打开 <a href="https://github.com/BarriosHuang/BarriosHuang.github.io/upload/main/tarot">github.com/BarriosHuang/BarriosHuang.github.io/upload/main/tarot</a></li>
-<li>把 <code>The_Work_of_Days.html</code> 拖进去，改名为 <code>index.html</code>（覆盖本页）</li>
-<li>Commit 之后等一两分钟，刷新本页</li>
-</ol>
-<p>也可以把同一个 HTML 直接发给朋友，用浏览器打开即可，不需要站点。</p>
+<div class="langtoggle">
+  <button id="btn-en" class="on" onclick="setLang('en')">EN</button>
+  <button id="btn-zh" onclick="setLang('zh')">中文</button>
 </div>
+<div class="wrap">
+<header class="mast">
+  <div class="kicker">Tarot × Self-Reflection · Offline · 78-Card Rider-Waite</div>
+  <h1 class="title">The Work of <em>Days</em></h1>
+  <div class="zh-sub">日课塔罗 · 自我反思之具 · 完整 78 张</div>
+  <p class="sub">A tarot tool built to be tarot — and considerably more. Seventy-eight cards, each with its own reading. The cards become a honest randomization that bypasses your analytical defenses; the deep reading connects each draw to your other frameworks: PERMA wellbeing pillars, Gallup strengths, Dark Triad/HEXACO shadow material, and the values lens of Odyssey-style reflection. The light face is for what wants to emerge; the shadow face is for what wants integration. Neither is "good" or "bad."<br/>
+  <span style="font-family:var(--sc); display:block; margin-top:6px; line-height:1.85;">一份既是塔罗、又远不止于塔罗的工具。七十八张牌，张张有独立解读。牌成为一种诚实的随机性，绕过你的分析式防御；深度解读把每一次抽牌连接到你已在使用的其他框架——PERMA 幸福五支柱、盖洛普优势、Dark Triad 与 HEXACO 的阴影材料、以及 Odyssey 式反思的价值观透镜。正位是想要浮现之物；逆位是想要被整合之物。两者皆不是'好'或'坏'。</span></p>
+</header>
+
+<div id="content"></div>
+
+<footer>
+  <p class="note">CARD MEANINGS · drawn from the Rider-Waite-Smith tradition (Arthur Edward Waite & Pamela Colman Smith, 1909) with Jungian archetype framing. Frameworks referenced: Seligman's PERMA model; Gallup CliftonStrengths domains; Paulhus & Williams's Dark Triad (2002); Ashton & Lee's HEXACO H-factor (2007).</p>
+  <p class="note" style="margin-top:8px;">This tool is for self-reflection. It is not psychic prediction, clinical diagnosis, or a replacement for human counsel when you need one. Generated and run entirely in your browser — no data leaves this page. · 本工具用于自我反思，并非通灵预言、临床诊断，也不能替代你需要时寻求的真人咨询。完全在本地浏览器中生成与运行，无数据传出。</p>
+</footer>
+</div>
+<script>
+/* ============================================================
+   THE WORK OF DAYS — Tarot × Self-Reflection Tool
+   DATA LAYER: 22 Major Arcana cards
+   
+   Each card carries:
+   - Number (0-21) and traditional name
+   - Jungian archetype it embodies
+   - Upright reading (the light face — what wants to emerge)
+   - Reversed reading (the shadow face — what wants integration,
+     NOT what is "bad" — this is the growth-mind reframe)
+   - Element / Astro correspondence (traditional)
+   - PERMA pillar it most strongly invokes
+   - Bridge to Gallup Strengths domain
+   - Question to sit with today
+   - Mantra (short, action-oriented, NOT saccharine)
+   
+   Translation principles: Chinese uses scholarly vocabulary,
+   avoids new-age cliché, never uses '散文' for prose-like.
+   Where English carries technical/Jungian terms, Chinese
+   preserves them.
+   ============================================================ */
+
+const MAJOR_ARCANA = [
+ {n:0, key:"fool", en:"The Fool", zh:"愚者",
+  archetype_en:"The Innocent / Beginner's Mind", archetype_zh:"赤子之心 / 初心",
+  element:"air", astro:"Uranus", perma:"M", csf:"ST",
+  upright_en:"A threshold. The ground in front of you has not yet been mapped. Your task today is not to predict where the path goes, but to recognize that walking is the only way the path will appear at all. Beginner's mind is not naïveté — it is the deliberate setting aside of expert assumptions so something genuinely new can be perceived.",
+  upright_zh:"一道门槛。你脚下的土地尚未被绘入任何地图。今日之事，不在于预判前路所向，而在于认清——唯有起步，路径才会显现。'初心'不是天真，而是有意识地搁置专家式的预设，以使真正崭新之物得以被看见。",
+  shadow_en:"The reversed Fool is not foolishness — it is the resistance to taking the leap that needs taking, dressed up as caution. Notice where you have built a sophisticated argument for staying still. The shadow integration is to ask: what would I do today if I trusted that the floor would catch me, and to do one small thing accordingly.",
+  shadow_zh:"逆位的愚者并非愚蠢——而是对'该走的那一步'的抗拒，伪装成了审慎。留意：你在何处为'停在原地'构建了一套精致的论证。整合阴影之路是问自己：若我相信地板会接住我，今日我会做什么——然后做其中一件小事。",
+  question_en:"Where am I treating caution as wisdom when it is actually fear in a tailored suit?",
+  question_zh:"在何处，我把谨慎当作智慧——而它其实是穿了量身定制西装的恐惧？",
+  mantra_en:"Walking is how the path appears.",
+  mantra_zh:"路是走出来的，不是先看见的。"},
+ 
+ {n:1, key:"magician", en:"The Magician", zh:"魔术师",
+  archetype_en:"The Conscious Will / The Creator", archetype_zh:"有意识的意志 / 创造者",
+  element:"air", astro:"Mercury", perma:"A", csf:"IN",
+  upright_en:"All four elements lie on your table — wand, cup, sword, pentacle — the tools you need are already in front of you. The Magician's power is not magic in the literal sense but the focused application of will to materials at hand. The question is not 'what do I lack' but 'what am I refusing to pick up'.",
+  upright_zh:"四元素皆陈于你的台前——权杖、圣杯、宝剑、星币——你所需的工具都已在眼前。魔术师的力量不是字面意义上的魔法，而是将意志聚焦地施加于手边材料的能力。问题不是'我缺什么'，而是'我在拒绝拿起什么'。",
+  shadow_en:"Reversed: scattering of will across too many open tabs. Power that doesn't land is not power. The shadow practice today is to close three things — windows, projects, conversations — that are draining without producing. Concentration is itself a form of magic.",
+  shadow_zh:"逆位：意志在过多的开放标签页之间被稀释。无法落地的力量不是力量。今日的阴影练习是关掉三样东西——窗口、项目、对话——它们在消耗而无产出。专注，本身就是一种魔法。",
+  question_en:"What tool is already on my desk that I keep saying I need before I can begin?",
+  question_zh:"什么工具其实已在我案上，而我却一直在说'还要等到我有了它再开始'？",
+  mantra_en:"The materials are already here.",
+  mantra_zh:"材料早已就位。"},
+ 
+ {n:2, key:"high_priestess", en:"The High Priestess", zh:"女祭司",
+  archetype_en:"The Inner Knower / The Veiled Wisdom", archetype_zh:"内在的知者 / 帷幕后的智慧",
+  element:"water", astro:"Moon", perma:"M", csf:"ST",
+  upright_en:"Between two pillars sits one who knows without speaking. This card asks for the kind of intelligence that does not announce itself — the gut sense, the dream image, the figure-eight you almost saw at the edge of vision. Today, before you decide, sit with what you knew before you started thinking.",
+  upright_zh:"两根石柱之间，坐着一位无需言说便已知晓的人。这张牌呼唤一种不张扬的智识——直觉的低语、梦境的意象、你几乎在视野边缘瞥见的某个轮廓。今日，在决断之前，先与那个'你还未开始思考之前就已知道的东西'静坐片刻。",
+  shadow_en:"Reversed: ignoring the inner voice in favor of louder consensus, or its mirror — mistaking every passing intuition for a divine signal. The integration is discernment: which inner sense has weight, and which is anxiety in mystical clothing? Test by asking whether the knowing is calm or agitated.",
+  shadow_zh:"逆位：因外界更响亮的共识而忽视内在的声音；或与之相反——把每一闪而过的直觉都误认为神圣启示。整合之道在于'辨识'：哪一种内在感知是有分量的，哪一种只是焦虑披上了神秘的外衣？可用一个标尺检验——那份'知道'是平静的，还是躁动的？",
+  question_en:"What do I already know but have not yet allowed myself to say out loud?",
+  question_zh:"什么是我其实早已知晓、却还没有允许自己说出口的？",
+  mantra_en:"The quiet knowing has more weight than the loud opinion.",
+  mantra_zh:"静默的知晓，比喧嚣的意见更具分量。"},
+ 
+ {n:3, key:"empress", en:"The Empress", zh:"皇后",
+  archetype_en:"The Great Mother / Fertility of Mind & World", archetype_zh:"大母神 / 心与世界的丰饶",
+  element:"earth", astro:"Venus", perma:"P", csf:"RB",
+  upright_en:"Abundance, sensuality, the generative power of attending to what is already alive in you. The Empress reminds you that productivity is not the same thing as fertility. Some of the most valuable hours of a year are the ones spent watering what is already growing rather than planting more.",
+  upright_zh:"丰饶、感官的丰盈、以及'用心照看你内在已然鲜活之物'所带来的生发之力。皇后提醒你：生产力与丰饶并不相同。一年中最有价值的时光，往往不是花在'再多种点什么'，而是花在'灌溉那些已经在生长之物'。",
+  shadow_en:"Reversed: smothering care, or the opposite — neglect of the inner garden in the name of being busy with others'. The shadow lesson is the impossibility of pouring from an empty vessel. What part of your aliveness has been ignored long enough that it has begun to wither?",
+  shadow_zh:"逆位：窒息式的关怀；或与之相反——以'忙于他人之事'为名，疏于照管自己内在的花园。这一阴影教诲是：空杯无以倾倒。你身上哪一部分的'活着的感觉'，已被忽视太久、开始枯萎？",
+  question_en:"What am I creating, and what am I neglecting in order to create it?",
+  question_zh:"我正在创造什么——而为了创造它，我正在荒废什么？",
+  mantra_en:"Tend what is alive before you plant more.",
+  mantra_zh:"先照看已活之物，再去栽种新的。"},
+ 
+ {n:4, key:"emperor", en:"The Emperor", zh:"皇帝",
+  archetype_en:"The Father / Structure & Sovereignty", archetype_zh:"父亲 / 结构与主权",
+  element:"fire", astro:"Aries", perma:"A", csf:"EX",
+  upright_en:"Order, boundary, the structures that make freedom actually possible. The Emperor is not authoritarianism — that is the shadow. The Emperor is the parent who said 'bedtime is at nine' so that you could feel safe enough to sleep deeply. Today, ask where your life is lacking enough structure to be truly free within.",
+  upright_zh:"秩序、边界、那些使自由真正得以可能的结构。皇帝并非威权主义——威权是它的阴影。皇帝是那位说'九点就寝'的家长，正因如此你才得以安心入眠。今日，请审视：你的生活在哪里因缺乏足够的结构，反而失去了真正在其中自由的可能？",
+  shadow_en:"Reversed: rigidity that mistakes itself for principle, or its mirror — chaotic refusal of all structure as 'authentic'. The integration is to ask which rules in your life are serving you and which you have outgrown, then to revise them deliberately. Sovereignty is the willingness to set the rules and then be subject to them.",
+  shadow_zh:"逆位：把自身误认作'原则'的僵化；或与之相反——以'本真'之名拒绝一切结构的混乱。整合之道是审视：你生活中哪些规则仍在服务于你，哪些已被你超越——然后有意识地修订它们。真正的主权，是甘愿订下规则、并甘愿受它约束。",
+  question_en:"Which rule of mine has outlived its usefulness — and which boundary do I keep meaning to set but haven't?",
+  question_zh:"我的哪一条规则已经过了它有用的时效——而哪一条边界我一直想立、却始终未立？",
+  mantra_en:"Structure makes freedom possible.",
+  mantra_zh:"结构使自由得以可能。"},
+ 
+ {n:5, key:"hierophant", en:"The Hierophant", zh:"教皇",
+  archetype_en:"The Teacher / Inherited Wisdom", archetype_zh:"导师 / 传承的智慧",
+  element:"earth", astro:"Taurus", perma:"M", csf:"RB",
+  upright_en:"Tradition, lineage, the wisdom of those who walked this road first. The Hierophant card asks: what teaching, mentor, or inherited practice deserves your attention today — not because authority demands it, but because someone genuinely figured something out that you can stop trying to invent from scratch?",
+  upright_zh:"传统、传承、前人走过此路所留下的智慧。教皇这张牌发问：今日，哪一份教诲、哪一位师者、哪一项传承下来的实践值得你的注意——不是因为权威要求你，而是因为有人确实已经把某件事悟透，而你不必再'从头发明'？",
+  shadow_en:"Reversed: dogma that has lost its life, or its mirror — chronic rebellion that defines itself only by what it is against. The integration is to choose your teachers consciously. Lineage is a resource, not a chain. Whose voice in your head deserves a respectful retirement, and whose deserves more time?",
+  shadow_zh:"逆位：已失去生命的教条；或与之相反——长期叛逆，仅凭'反对什么'来界定自身。整合之道是有意识地选择你的师者。传承是资源，而非锁链。你脑海中哪一种声音值得被恭敬地请退，哪一种值得被给予更多时间？",
+  question_en:"Whose teaching am I overdue to revisit — and whose am I overdue to outgrow?",
+  question_zh:"哪位老师的教诲，我早该重温？哪位的，我早该超越？",
+  mantra_en:"You don't have to invent every wheel.",
+  mantra_zh:"不必每个轮子都从头发明。"},
+ 
+ {n:6, key:"lovers", en:"The Lovers", zh:"恋人",
+  archetype_en:"The Choice / Sacred Union", archetype_zh:"抉择 / 神圣的结合",
+  element:"air", astro:"Gemini", perma:"R", csf:"RB",
+  upright_en:"This card is misnamed for popular consumption — it is not primarily about romance. It is the card of profound choice, the kind where two paths diverge and choosing one means becoming someone who could only have chosen that. Today asks for a decision aligned with values rather than convenience.",
+  upright_zh:"这张牌为大众传播之故，常被误名——它的核心并非浪漫爱情。它是关于深刻抉择的牌——那种两路分岔、选择其一便意味着'成为只可能做出这一选择之人'的抉择。今日要求一个与价值观对齐、而非与便利对齐的决定。",
+  shadow_en:"Reversed: avoidance of the choice, or its mirror — choices made by default through inaction. Both are the same thing wearing different clothes. The shadow integration is to notice the choice you are currently making by not choosing, and to name it as such.",
+  shadow_zh:"逆位：回避抉择；或与之相反——通过'不作为'所默认做出的选择。两者其实是同一件事，只是衣衫不同。整合之道是看清：你此刻正通过'不选'而做出怎样的选择，并如实命名它。",
+  question_en:"What am I choosing by not choosing?",
+  question_zh:"通过'不做选择'，我其实正在选择什么？",
+  mantra_en:"Not choosing is a choice with the cost hidden.",
+  mantra_zh:"不选，也是一种选择——只是它的代价被藏起来了。"},
+ 
+ {n:7, key:"chariot", en:"The Chariot", zh:"战车",
+  archetype_en:"Willed Forward Motion / Disciplined Drive", archetype_zh:"被意志驱动的前行 / 有纪律的驱动力",
+  element:"water", astro:"Cancer", perma:"A", csf:"EX",
+  upright_en:"Two sphinxes pull in opposing directions; the charioteer holds the reins of both. The card is about how to move forward when internal forces pull against each other, and the answer is not to silence either but to hold the tension and use it. Drive without direction is exhaustion. Direction without drive is fantasy.",
+  upright_zh:"两只方向相反的斯芬克斯拉着车，御者手握双缰。这张牌讲的是：当你内在的力量彼此拉扯时，如何依然向前——答案不是压制其中一方，而是握住这份张力并加以利用。无方向的驱动是耗竭。无驱动的方向是空想。",
+  shadow_en:"Reversed: motion without direction (busy but unmoving), or rigidity of direction without enough drive to actually arrive. The integration: choose the destination first, then check whether your daily motion is actually carrying you there.",
+  shadow_zh:"逆位：无方向的奔忙（看似忙碌却原地未动）；或与之相反——方向僵硬而驱动力不足以到达。整合之道：先确定目的地，再检视——你每日的奔走，是否真的在把你带向那里？",
+  question_en:"Of the two inner forces pulling against me today — what would it look like to hold both rather than choose between them?",
+  question_zh:"今日，那两股在我内心相互拉扯的力量——若我'同时握住二者'而非'在二者间取其一'，会是什么样子？",
+  mantra_en:"Hold the tension; use it as fuel.",
+  mantra_zh:"握住那份张力，把它当作燃料。"},
+ 
+ {n:8, key:"strength", en:"Strength", zh:"力量",
+  archetype_en:"Inner Mastery / The Civilized Beast", archetype_zh:"内在的驾驭 / 被文明的猛兽",
+  element:"fire", astro:"Leo", perma:"E", csf:"IN",
+  upright_en:"A woman gently closes the lion's mouth. She does not slay it — that is the older, cruder iconography. She befriends it. Your strength today is the willingness to face what is fierce in you (anger, hunger, ambition, fear) with curiosity rather than war. Power is not the absence of the beast; it is being on speaking terms with it.",
+  upright_zh:"一位女子温柔地合上狮子的口。她没有杀掉它——那是更古老、更粗暴的图像志。她与它结为友伴。今日你的力量，在于以好奇而非战争的姿态面对你内在凶猛的部分（愤怒、饥饿、野心、恐惧）。力量不是猛兽的缺席，而是与它处于'可以说话'的关系之中。",
+  shadow_en:"Reversed: forcing the beast into submission (which always rebounds) or being run by it (which always destroys). The integration is the harder middle — sit with the feeling without acting on it AND without suppressing it. Twenty minutes of conscious attention beats twenty years of repression.",
+  shadow_zh:"逆位：强行压服猛兽（必然反弹）；或被猛兽驱使（必然毁坏）。整合之道在于那条更难走的中道——既不依其行动，也不压抑它，只是与那种感受同坐。二十分钟有意识的注视，胜过二十年的压抑。",
+  question_en:"What in me have I been trying to defeat that actually wants to be befriended?",
+  question_zh:"我内在的什么，我一直试图打败它，而它其实只是想与我结为友伴？",
+  mantra_en:"Gentleness is the deeper strength.",
+  mantra_zh:"温柔，是更深一层的力量。"},
+ 
+ {n:9, key:"hermit", en:"The Hermit", zh:"隐者",
+  archetype_en:"The Solitary Seeker / Inner Light", archetype_zh:"独行的探求者 / 内在之光",
+  element:"earth", astro:"Virgo", perma:"M", csf:"ST",
+  upright_en:"An old figure stands on a mountain holding a lantern. He is not lost — he is the one with the light. Today is for the kind of work that only deepens in solitude: thinking, writing, sitting with a hard question rather than fleeing to the next stimulus. The Hermit's light is not for everyone — it is for the next step on your own path.",
+  upright_zh:"一位长者立于山巅，手执提灯。他没有迷路——他是那个'手中有光'的人。今日适合那种唯有在独处中才能加深的工作：思考、写作、与一道艰难的问题静坐，而不是逃向下一个刺激。隐者的灯光不是为照亮所有人——它是为照亮你自己脚下的下一步。",
+  shadow_en:"Reversed: isolation that has tipped into avoidance, or its mirror — chronic socializing that uses other people as anesthesia. The integration is to ask: when was the last hour I spent fully alone, without input, without scrolling, with only my own mind? Schedule it.",
+  shadow_zh:"逆位：已经滑向回避的孤立；或与之相反——以'用他人作为麻醉剂'的方式持续社交。整合之道是问自己：上一次我完全独处一个小时——没有输入、不刷手机、只与自己的心智在一起——是什么时候？把它安排上日程。",
+  question_en:"What question can only be answered in solitude that I keep trying to think about in company?",
+  question_zh:"什么问题只能在独处中得到回答——而我却一直试图在他人陪伴中思考它？",
+  mantra_en:"The light goes ahead of one walker at a time.",
+  mantra_zh:"灯火，一次只为一个行者照亮前路。"},
+ 
+ {n:10, key:"wheel", en:"Wheel of Fortune", zh:"命运之轮",
+  archetype_en:"The Turning of Cycles / Fate Meeting Will", archetype_zh:"循环的转动 / 命运与意志的交会",
+  element:"fire", astro:"Jupiter", perma:"M", csf:"ST",
+  upright_en:"The wheel turns — some of it is yours to push, much of it is not. The card asks for the mature middle ground between the modern delusion that you control everything by mindset alone and the ancient resignation that you control nothing. Today: do the work that is yours, and let go of the part that never was.",
+  upright_zh:"轮子在转——其中一部分是你可以推的，更多部分则不在你的控制之内。这张牌呼唤一种成熟的中道——既不是现代式的妄念（以为单凭心态便能掌控一切），也不是古老式的认命（以为自己什么也掌控不了）。今日：做属于你的那部分功夫，放下那从来就不属于你的部分。",
+  shadow_en:"Reversed: clinging to control over what was never yours, or its mirror — using 'fate' as an excuse for the agency you do have. Both are forms of avoidance. The integration is the Serenity Prayer's distinction: which is which, today?",
+  shadow_zh:"逆位：紧握那从未真正属于你的控制权；或与之相反——以'命运'为借口，回避你确实拥有的能动性。两者都是一种回避。整合之道，正是宁静祷文那句话的区分——今天，哪些是哪些？",
+  question_en:"Where am I trying to control what is not mine — and where am I abdicating what is?",
+  question_zh:"我在哪里试图掌控不属于我的事——又在哪里放弃了本属于我的责任？",
+  mantra_en:"Push what is mine to push. Bow to what is not.",
+  mantra_zh:"该推的去推，不该推的，鞠躬放手。"},
+ 
+ {n:11, key:"justice", en:"Justice", zh:"正义",
+  archetype_en:"Truth / Karmic Balance", archetype_zh:"真相 / 因果的平衡",
+  element:"air", astro:"Libra", perma:"M", csf:"EX",
+  upright_en:"Justice holds a sword and scales — not vengeance, but truth weighed without flinching. The card asks where you have been telling yourself a story that is convenient rather than true, and what would change if you let yourself see clearly. The cost of truth is short. The cost of self-deception compounds.",
+  upright_zh:"正义女神手持剑与天平——这不是复仇，而是不闪躲地称量真相。这张牌问你：在何处你一直对自己讲一个'方便'的故事而非'真实'的故事？若允许自己看清，将会发生什么改变？真相的代价是短期的；自我欺骗的代价，是会复利累积的。",
+  shadow_en:"Reversed: avoiding accountability — yours or someone else's — or its mirror, weaponized judgment that uses 'truth' as a club. The integration is to ask whether you are seeking clarity or seeking to be right. They are not the same thing.",
+  shadow_zh:"逆位：回避问责——无论是你的，还是他人的；或与之相反——被武器化的判断，把'真相'当作棍棒挥舞。整合之道是问自己：我在寻求清明，还是在寻求'我是对的'？这两件事并不相同。",
+  question_en:"What true thing am I unwilling to say to myself today?",
+  question_zh:"今日，有什么真话，是我不愿意对自己说的？",
+  mantra_en:"The cost of truth is short. The cost of self-deception compounds.",
+  mantra_zh:"真相的代价短暂，自欺的代价复利。"},
+ 
+ {n:12, key:"hanged_man", en:"The Hanged Man", zh:"倒吊人",
+  archetype_en:"Surrender / The Reversed Perspective", archetype_zh:"主动的臣服 / 颠倒的视角",
+  element:"water", astro:"Neptune", perma:"M", csf:"ST",
+  upright_en:"A figure hangs upside down — by choice, not punishment — and his face is peaceful. This is the card of the deliberate pause: the willingness to suspend forward motion in order to see what only the reversed view reveals. Some problems cannot be solved at the level of energy that created them. Some require you to hang still until the angle changes.",
+  upright_zh:"一个人倒挂着——出于选择，而非惩罚——而他的面容是平静的。这是关于'有意识的停顿'的牌：愿意暂停前行，以看见唯有'颠倒的视角'才能揭示的东西。有些问题，无法在制造它的能量层级上被解决；有些问题，需要你静静悬挂，直到角度自行转变。",
+  shadow_en:"Reversed: a pause that has become a stuckness — meditation as avoidance, contemplation as procrastination, rest as a hiding place. The integration is to ask whether the pause is generative or evasive. A real pause produces clarity within a knowable timeframe.",
+  shadow_zh:"逆位：本是停顿，却已成为困住——把禅修变成了回避，把沉思变成了拖延，把休息变成了藏身之所。整合之道是问自己：这份停顿，是生发性的，还是逃避性的？真正的停顿，会在一个可知的时段内产出清明。",
+  question_en:"What if today I let the problem hang upside down for a while, instead of attacking it from the angle that hasn't worked yet?",
+  question_zh:"若今日我让这个问题倒挂片刻，而非继续从'尚未奏效的角度'去攻击它，会怎样？",
+  mantra_en:"Suspend, don't surrender.",
+  mantra_zh:"是悬挂，不是放弃。"},
+ 
+ {n:13, key:"death", en:"Death", zh:"死神",
+  archetype_en:"Necessary Ending / Transformation", archetype_zh:"必要的终结 / 蜕变",
+  element:"water", astro:"Scorpio", perma:"M", csf:"ST",
+  upright_en:"The most misunderstood card in the deck. Almost never literal. It is the card of necessary endings — the relationship that has run its course, the identity you have outgrown, the project that needs to die so something else can be born. Refusing to let something end keeps it half-alive, which is worse than mourning it properly.",
+  upright_zh:"全副牌中被误解最深的一张。几乎从不字面意义。它是关于'必要终结'的牌——那段已走完的关系、那个你已经超越的身份、那个必须死去以让别的东西得以诞生的项目。拒绝让某物终结，会让它停留在半生不死之中——这比好好哀悼它要糟糕得多。",
+  shadow_en:"Reversed: refusing the death — clinging, postponing, pretending. Or its mirror, premature death — ending things in panic before they have actually finished. The integration is to ask, with honesty: is this ending, or am I cutting? They are not the same.",
+  shadow_zh:"逆位：拒绝那个终结——攀附、推迟、佯装。或与之相反——过早的死亡——在事情其实尚未走完时，因惊慌而切断。整合之道是诚实地问自己：这是在'让它结束'，还是在'我把它砍掉'？这两者并不相同。",
+  question_en:"What in my life is half-alive because I haven't let it properly die?",
+  question_zh:"我生活中什么东西正处于半生不死之中——只因我未曾允许它真正死去？",
+  mantra_en:"Endings are how beginnings make room.",
+  mantra_zh:"终结，是开始得以腾出位置的方式。"},
+ 
+ {n:14, key:"temperance", en:"Temperance", zh:"节制",
+  archetype_en:"The Alchemist / Patient Blending", archetype_zh:"炼金术士 / 耐心的调和",
+  element:"fire", astro:"Sagittarius", perma:"P", csf:"RB",
+  upright_en:"An angel pours liquid between two cups — a precise, patient blending of opposites. This is the alchemy card. Today is for the work that cannot be hurried: finding the right ratio between rest and effort, between speaking and listening, between giving and keeping. The middle path is not a compromise — it is a craft.",
+  upright_zh:"一位天使在两个杯子之间倾倒液体——以一种精确而耐心的方式调和对立。这是炼金之牌。今日适合那种无法被催促的工作：在休息与努力之间、在言说与倾听之间、在给予与持守之间，找到正确的配比。中道不是妥协——它是一门手艺。",
+  shadow_en:"Reversed: imbalance you can feel but haven't named — overdoing in one direction, underdoing in another. Or its mirror, the perfectionism that demands the exact ratio before doing anything. The integration is approximate alignment over time, not perfect calibration in any moment.",
+  shadow_zh:"逆位：你能感觉到、却尚未说出口的失衡——某一方向过度、另一方向不足。或与之相反——那种坚持要先找到精确配比、才肯动手的完美主义。整合之道是'随时间逐步逼近的对齐'，而非'任一时刻的完美校准'。",
+  question_en:"Where in my life is the ratio off — and what would a 5% correction look like today?",
+  question_zh:"我生活中哪里的配比偏了——而今日做出 5% 的修正，会是什么样子？",
+  mantra_en:"The middle path is a craft, not a compromise.",
+  mantra_zh:"中道是手艺，不是妥协。"},
+ 
+ {n:15, key:"devil", en:"The Devil", zh:"恶魔",
+  archetype_en:"Bondage of Our Own Making / Shadow Material", archetype_zh:"自缚的枷锁 / 阴影材料",
+  element:"earth", astro:"Capricorn", perma:"M", csf:"EX",
+  upright_en:"Two figures stand chained — but if you look closely, the chains are loose around their necks. They could lift them off at any time. The Devil card names the bondage of our own making: the habit, the relationship pattern, the belief about ourselves that we treat as fact. Today, look closely at the chain — it may be looser than you remember.",
+  upright_zh:"两个人立着，颈上有锁链——但若你仔细看，那链子松松地套在他们颈间。他们随时可以把它取下。恶魔牌点名的是'我们自己造的枷锁'：那个习惯、那个关系模式、那个被我们当作事实的关于自己的信念。今日，靠近些看那链子——它可能比你记忆中要松。",
+  shadow_en:"This card IS the shadow — the part you find unacceptable. Reversed actually means liberation: the moment you see the chain clearly is the moment it loses its power. The integration is not to fight the shadow but to look at it without flinching. What you can see, you can choose. What you refuse to see, runs you.",
+  shadow_zh:"这张牌本身就是阴影——你无法接受的那部分。逆位实际上意味着解脱：当你清楚看见那条锁链的那一刻，它便失去了力量。整合之道不是与阴影作战，而是不闪躲地凝视它。你能看见的东西，你便能选择。你拒绝看见的东西，则会操纵你。",
+  question_en:"What pattern am I treating as 'just who I am' that is actually a chain I could set down?",
+  question_zh:"什么模式被我当作'我就是这样的人'——而它其实是一条我能放下的锁链？",
+  mantra_en:"What you can see, you can choose.",
+  mantra_zh:"你能看见的，便能选择；你拒绝看见的，会操纵你。"},
+ 
+ {n:16, key:"tower", en:"The Tower", zh:"高塔",
+  archetype_en:"Sudden Collapse / Necessary Demolition", archetype_zh:"骤然的崩塌 / 必要的拆除",
+  element:"fire", astro:"Mars", perma:"M", csf:"ST",
+  upright_en:"Lightning strikes a tower built on a faulty foundation. Figures fall from the windows. This card is uncomfortable because it depicts crisis — but the crisis is precisely the rapid removal of what would have collapsed slowly anyway. If something in your life is shaking violently right now, ask whether it was always going to come down, and whether quickly is actually mercy.",
+  upright_zh:"闪电击中一座建在松动地基上的高塔。人们从窗中坠落。这张牌令人不适，因为它描绘的是危机——但这种危机，恰恰是对'本就会缓慢崩塌之物'的迅速移除。如果你生活中某样东西此刻在剧烈摇晃，请问自己：它是否本就注定要倒？而'快倒'，是否其实是一种慈悲？",
+  shadow_en:"Reversed: refusing to let the false structure fall — propping it up at increasing cost. Or its mirror, manufacturing crisis where steady work would do. The integration is to distinguish necessary collapse from self-inflicted drama. The Tower falls in its own time; you don't need to push it.",
+  shadow_zh:"逆位：拒绝让那个虚假的结构倒下——以不断增加的代价支撑它。或与之相反——在原本只需稳扎稳打的地方制造危机。整合之道是分辨：哪些是必要的崩塌，哪些是自找的戏剧。高塔自有它倒下的时辰，你不必去推。",
+  question_en:"If something in my life is shaking right now, was it built on what is actually true?",
+  question_zh:"若我生活中某样东西正在摇晃——它当初是建在'真实'之上吗？",
+  mantra_en:"Quick collapse can be mercy.",
+  mantra_zh:"骤然的崩塌，有时是慈悲。"},
+ 
+ {n:17, key:"star", en:"The Star", zh:"星星",
+  archetype_en:"Hope / Quiet Renewal", archetype_zh:"希望 / 静默的复元",
+  element:"air", astro:"Aquarius", perma:"P", csf:"ST",
+  upright_en:"After the Tower's collapse comes the Star: a naked figure kneels at the edge of water, pouring renewal. This is the card of quiet hope — not the loud optimism that denies what hurts, but the steady knowing that what has been broken can be tended, and tending is itself the medicine. After a hard season, the smallest deliberate act of care is bigger than it looks.",
+  upright_zh:"高塔崩塌之后，是星星：一位赤裸的人物跪在水边，倾倒着复元之水。这是关于'静默的希望'的牌——不是那种否认伤痛的喧嚣乐观，而是那种沉稳的知晓：被打破之物可以被照看，而'照看'本身就是良药。在一段艰难的时节之后，最微小的一次有意识的关怀，比它看上去要大得多。",
+  shadow_en:"Reversed: hopelessness disguised as realism, or its mirror — bypassing the actual grief by jumping to 'silver linings' too quickly. The integration is to let hope and sorrow coexist. You can be tending the garden and still mourning what the storm took.",
+  shadow_zh:"逆位：以'现实主义'为伪装的无望感；或与之相反——以过快地跳到'其实也有好的一面'，绕过了真实的悲伤。整合之道是让希望与哀伤并存。你可以一边照看花园，一边为风暴所带走的东西哀悼。",
+  question_en:"What small act of tending today would be larger than it looks?",
+  question_zh:"今日，哪一个微小的'照看'之举，其实比它看上去要大？",
+  mantra_en:"Tending is the medicine.",
+  mantra_zh:"照看，就是良药。"},
+ 
+ {n:18, key:"moon", en:"The Moon", zh:"月亮",
+  archetype_en:"The Unconscious / What Is Not Yet Seen Clearly", archetype_zh:"无意识 / 尚未被看清之物",
+  element:"water", astro:"Pisces", perma:"M", csf:"ST",
+  upright_en:"A path winds between two towers under a moon whose face is troubled. A dog and a wolf howl. A crayfish emerges from the water. This is the card of the unconscious — dreams, half-formed fears, the gut sense of something not right that you have not yet been able to name. Today, the wise move is not to push through the fog but to walk slowly, paying attention to what is rising.",
+  upright_zh:"月光下，一条小径在两座塔之间蜿蜒；月亮的面容忧扰；一狗一狼齐声嗥叫；一只螯虾从水中浮出。这是关于'无意识'的牌——梦、尚未成形的恐惧、那种'有什么不对劲，却还说不出口'的直觉。今日，明智之举不是强行冲过迷雾，而是放慢脚步，留意正在浮现之物。",
+  shadow_en:"Reversed: deception, including self-deception — or its mirror, paranoid suspicion that sees deception where there is none. The integration is to ask which is true today, and to trust the body's signal. If your gut keeps whispering, it is saying something. If your gut is screaming about everything, the screaming itself is the message.",
+  shadow_zh:"逆位：欺骗——包括自我欺骗；或与之相反——那种到处看见欺骗的偏执怀疑。整合之道是问'今日是哪一种'，并信任身体的信号。若你的直觉一直在低语，它在告诉你某事；若你的直觉对一切都在尖叫，那么'尖叫本身'就是信息。",
+  question_en:"What am I sensing that I have not yet allowed myself to put into words?",
+  question_zh:"什么是我正在感知到、却尚未允许自己用语言说出口的？",
+  mantra_en:"Walk slowly in the fog. Don't run.",
+  mantra_zh:"雾中慢行，勿奔跑。"},
+ 
+ {n:19, key:"sun", en:"The Sun", zh:"太阳",
+  archetype_en:"Vitality / Visible Joy", archetype_zh:"生机 / 可见的喜悦",
+  element:"fire", astro:"Sun", perma:"P", csf:"IN",
+  upright_en:"A child rides a horse under a bright sun, sunflowers behind. This is the simplest card in the deck and the hardest to receive when life is heavy — uncomplicated vitality. The card asks where you have been making things more elaborate than they need to be. Sometimes the answer is just: be in the sun, eat the meal, see the person, do the thing.",
+  upright_zh:"明亮的阳光下，一个孩子骑着马；身后是向日葵。这是全副牌中最简单的一张——也是当生活沉重时最难领受的一张：不复杂的生机。这张牌问你：在何处你把事情搞得比它本身需要的更繁复了？有时答案就是：晒晒太阳，把饭吃了，去见那个人，把那件事做了。",
+  shadow_en:"Reversed: performing joy without feeling it, or its mirror — distrusting joy when it actually arrives. The integration is to let yourself receive without earning it. The sun shines on the deserving and undeserving alike. Today, let it shine on you without first justifying why.",
+  shadow_zh:"逆位：表演着喜悦却并未感到；或与之相反——当真正的喜悦到来时，反而不信任它。整合之道是允许自己'不需赚取地'接受它。阳光普照——配得的与不配得的，一视同仁。今日，让它照在你身上——不必先证明为什么。",
+  question_en:"What simple joy am I making more complicated than it needs to be?",
+  question_zh:"什么简单的喜悦，被我搞得比它本身需要的更复杂了？",
+  mantra_en:"Receive without first earning.",
+  mantra_zh:"先领受，不必先赚得。"},
+ 
+ {n:20, key:"judgement", en:"Judgement", zh:"审判",
+  archetype_en:"The Calling / Inner Reckoning", archetype_zh:"召唤 / 内在的清算",
+  element:"fire", astro:"Pluto", perma:"M", csf:"ST",
+  upright_en:"An angel blows a trumpet; the dead rise from their coffins. This is not Judgement Day in the punitive sense — it is the moment of inner reckoning when you can no longer not see what you have seen. Something is calling you to a different scale of life, and the card asks whether you are ready to answer. You cannot un-hear a calling once you have heard it; you can only refuse, at growing cost.",
+  upright_zh:"一位天使吹响号角，逝者从棺中起身。这并非惩罚意义上的审判日——这是'内在清算'的那一刻：你再也无法对'你已看见的东西'装作没看见。某种东西在召唤你走向不同尺度的生命，这张牌问你：你是否准备好回应？听见的召唤无法假装未闻；你只能拒绝它——而拒绝的代价会不断累积。",
+  shadow_en:"Reversed: the call you have been pretending not to hear, or its mirror — premature 'callings' that are actually escapism. The integration is to discern: does this calling come from the deepest part of you (steady, recurring across years), or from a panic that wants any way out? Real callings are usually patient.",
+  shadow_zh:"逆位：你一直假装未闻的那个召唤；或与之相反——那种其实是逃避主义的'伪召唤'。整合之道是辨识：这个召唤是来自你最深的部分（沉稳、跨越数年反复出现），还是来自一种'只想找任何出口'的恐慌？真正的召唤通常是耐心的。",
+  question_en:"What have I heard called me — and how long have I been pretending I didn't hear it?",
+  question_zh:"我听见什么在召唤我？——而我假装没听见，已经多久了？",
+  mantra_en:"You can refuse the calling, but the cost compounds.",
+  mantra_zh:"召唤可以拒绝，但代价会复利。"},
+ 
+ {n:21, key:"world", en:"The World", zh:"世界",
+  archetype_en:"Integration / Completion of a Cycle", archetype_zh:"整合 / 一段循环的完成",
+  element:"earth", astro:"Saturn", perma:"A", csf:"ST",
+  upright_en:"A figure dances within a wreath, with the four creatures of the elements in the corners. This is the completion card — a cycle has integrated, the work is whole. Note that the figure is dancing, not resting. Completion is not the end; it is the moment when one whole becomes the foundation for the next beginning. Today, mark what has actually completed — and let yourself feel it before you rush on.",
+  upright_zh:"一位舞者在花环中起舞，四元素之灵位于四角。这是关于'完成'的牌——某一段循环已经整合，功课圆满。注意：那个人物在舞蹈，而非休息。完成并非终点——它是'一个整体成为下一个开始的地基'的那一刻。今日，标记下那些真正已完成的事——并在你急着往前走之前，先允许自己感受它。",
+  shadow_en:"Reversed: refusing to acknowledge completion (so you stay in the loop of 'one more thing'), or its mirror — declaring completion prematurely to escape the last hard mile. The integration is the discipline of marking the close. Closure is not weakness; it is what allows the next thing to begin clean.",
+  shadow_zh:"逆位：拒绝承认完成（于是你陷在'再多做一件'的循环中）；或与之相反——为了逃避最后那段最艰难的路，过早宣布完成。整合之道是'标记结束'的纪律。收尾不是软弱——它是让下一件事能干净地开始的前提。",
+  question_en:"What in my life has actually completed — and have I let myself feel that?",
+  question_zh:"我生活中什么东西其实已经完成了——而我，允许自己感受到了吗？",
+  mantra_en:"Closure is not weakness; it lets the next thing begin clean.",
+  mantra_zh:"收尾不是软弱——它让下一件事得以干净地开始。"}
+];
+
+// PERMA pillars (Seligman) — bilingual labels
+const PERMA_LABELS = {
+  P: {en:"Positive Emotion", zh:"积极情绪"},
+  E: {en:"Engagement", zh:"投入"},
+  R: {en:"Relationships", zh:"人际关系"},
+  M: {en:"Meaning", zh:"意义"},
+  A: {en:"Accomplishment", zh:"成就"}
+};
+
+// Gallup CSF Domains
+const CSF_LABELS = {
+  EX: {en:"Executing", zh:"执行力"},
+  IN: {en:"Influencing", zh:"影响力"},
+  RB: {en:"Relationship Building", zh:"关系建立"},
+  ST: {en:"Strategic Thinking", zh:"战略思维"}
+};
+
+const ELEMENTS = {
+  fire:  {en:"Fire", zh:"火", trait_en:"action, drive, transformation", trait_zh:"行动、驱动、蜕变"},
+  water: {en:"Water", zh:"水", trait_en:"feeling, intuition, depth", trait_zh:"感受、直觉、深度"},
+  air:   {en:"Air", zh:"风", trait_en:"thought, communication, clarity", trait_zh:"思维、沟通、清明"},
+  earth: {en:"Earth", zh:"土", trait_en:"body, practicality, manifestation", trait_zh:"身体、实务、落地"}
+};
+/* ============================================================
+   MINOR ARCANA — algorithmic structure
+   4 suits × (10 number cards + 4 court cards) = 56 cards
+   
+   Each minor card's meaning emerges from:
+   - Suit (element + life domain): Wands/Cups/Swords/Pentacles
+   - Number stage (Ace-10): the developmental position
+   - Court rank (Page/Knight/Queen/King): mode of engaging that suit
+   
+   This structure is faithful to traditional tarot (Wands = Fire/will,
+   Cups = Water/emotion, Swords = Air/intellect, Pentacles = Earth/material)
+   and lets us generate authentic readings without hand-writing 56 entries.
+   ============================================================ */
+
+const SUITS = {
+  wands: {
+    en:"Wands", zh:"权杖",
+    element:"fire",
+    domain_en:"will, drive, creative fire, projects",
+    domain_zh:"意志、驱动力、创造之火、项目",
+    psych_en:"Where is your fire today? What are you burning for or burning out on?",
+    psych_zh:"你今日的火焰在哪里燃烧？你正为何而燃——又在何处烧损？",
+    csf_link:"IN",  // Influencing — outward energy
+    perma:"E"
+  },
+  cups: {
+    en:"Cups", zh:"圣杯",
+    element:"water",
+    domain_en:"emotion, relationship, intuition, the inner life",
+    domain_zh:"情感、关系、直觉、内在生活",
+    psych_en:"What is your inner weather today? What are you holding, and is the cup full or running over?",
+    psych_zh:"你今日内在的天气如何？你正捧着什么——这只杯是盈满，还是已经溢出？",
+    csf_link:"RB",
+    perma:"R"
+  },
+  swords: {
+    en:"Swords", zh:"宝剑",
+    element:"air",
+    domain_en:"thought, communication, decision, conflict, mental clarity",
+    domain_zh:"思维、沟通、决断、冲突、心智的清明",
+    psych_en:"What thought is cutting through clearly today — and what thought is cutting you?",
+    psych_zh:"今日哪个念头清楚地划开了迷雾——又有哪个念头正在割伤你？",
+    csf_link:"ST",
+    perma:"M"  // M because clear thought serves meaning
+  },
+  pentacles: {
+    en:"Pentacles", zh:"星币",
+    element:"earth",
+    domain_en:"body, money, work, the material made manifest",
+    domain_zh:"身体、金钱、工作、被实现出的物质",
+    psych_en:"What in the material world deserves your attention today? Where is the rubber meeting the road?",
+    psych_zh:"今日，物质世界中什么值得你的注意？哪里是'落到实处'的关键节点？",
+    csf_link:"EX",
+    perma:"A"
+  }
+};
+
+// Number stages — these are universal across all four suits
+const NUMBERS = {
+  1: {  // Ace
+    name_en:"Ace", name_zh:"王牌",
+    stage_en:"Pure potential. The gift, the seed, the new beginning offered to you.",
+    stage_zh:"纯粹的潜能。礼物、种子、向你呈上的新的开始。",
+    shadow_en:"The seed unplanted. Potential held so close it never germinates. Today, take a small action on what wants to begin.",
+    shadow_zh:"未被播下的种子。被紧握的潜能从未发芽。今日，对那个'想要开始'之物，迈出一个小小的动作。"
+  },
+  2: {
+    name_en:"Two", name_zh:"二",
+    stage_en:"Polarity, choice, the meeting of two forces. The work is balance, not selection.",
+    stage_zh:"两极、抉择、两股力量的交汇。功课是平衡，而非取舍。",
+    shadow_en:"Either/or thinking when both/and is possible. The forced choice that didn't need to be forced.",
+    shadow_zh:"在'两者皆可'之处坚持'非此即彼'。那个本不必被强加的强行抉择。"
+  },
+  3: {
+    name_en:"Three", name_zh:"三",
+    stage_en:"First fruition. The early result that proves the direction is real. Celebrate it briefly, then keep working.",
+    stage_zh:"初次结果。早期的成果，证明方向是真实的。短暂地庆祝它，然后继续做工。",
+    shadow_en:"Mistaking early result for completion, or its opposite — dismissing the first fruit because it's not the full harvest yet.",
+    shadow_zh:"把初果误认作完成；或与之相反——因尚未到完全的收成而轻视第一颗果实。"
+  },
+  4: {
+    name_en:"Four", name_zh:"四",
+    stage_en:"Stability, structure, the foundation that holds. A pause for consolidation before the next move.",
+    stage_zh:"稳定、结构、能承载的地基。在下一步之前，为巩固而作的停顿。",
+    shadow_en:"Stagnation pretending to be stability. The pause that has become a refusal to move.",
+    shadow_zh:"以'稳定'之名的停滞。那个已变成'拒绝再动'的停顿。"
+  },
+  5: {
+    name_en:"Five", name_zh:"五",
+    stage_en:"Conflict, friction, the disruption of the stable four. Painful but necessary — what the foundation is missing reveals itself.",
+    stage_zh:"冲突、摩擦、对稳定之'四'的扰动。痛苦而必要——地基所缺之物在此显形。",
+    shadow_en:"Drama for drama's sake — manufacturing the conflict, or refusing to acknowledge a real one. Both keep you stuck at five.",
+    shadow_zh:"为戏剧而戏剧——人为制造冲突，或拒绝承认真实的冲突。两者都让你卡在'五'上。"
+  },
+  6: {
+    name_en:"Six", name_zh:"六",
+    stage_en:"Restoration, reciprocity, harmony after the conflict. Generosity that flows both ways.",
+    stage_zh:"复元、互惠、冲突之后的和谐。双向流动的慷慨。",
+    shadow_en:"One-sided giving or one-sided taking. The 'harmony' that papered over what wasn't actually resolved.",
+    shadow_zh:"单向的给予，或单向的索取。那种'和谐'，只是把未真正解决的东西糊上了一层纸。"
+  },
+  7: {
+    name_en:"Seven", name_zh:"七",
+    stage_en:"Assessment, the long view, the hill where you stop to see where you have come and where you are going.",
+    stage_zh:"审视、远望、那个驻足的山丘——你回望来路，也眺望去途。",
+    shadow_en:"Overthinking. The assessment that has become avoidance of the next action. Choose, then move.",
+    shadow_zh:"想得太多。本是审视，却已变成对下一步行动的回避。选定，然后动。"
+  },
+  8: {
+    name_en:"Eight", name_zh:"八",
+    stage_en:"Mastery through repetition. The work of becoming skilled — quiet, daily, unspectacular.",
+    stage_zh:"通过重复达成的精进。技艺生成的功夫——安静、日常、不显眼。",
+    shadow_en:"Mistaking quantity for mastery, or the perfectionism that won't ship until every detail is right. Both block real skill from compounding.",
+    shadow_zh:"把'量'误认作'精'；或那种'细节未完美绝不交付'的完美主义。两者都让真正的技艺无法复利累积。"
+  },
+  9: {
+    name_en:"Nine", name_zh:"九",
+    stage_en:"Near-completion. The last stretch. Almost — but not yet. Discipline holds here.",
+    stage_zh:"将近完成。最后一段路。几乎——但尚未。纪律在此守住阵脚。",
+    shadow_en:"Abandoning at 90%. The exhaustion that mistakes 'I am tired' for 'this is no longer worth finishing'.",
+    shadow_zh:"在 90% 处放弃。那种把'我累了'误认作'这不值得做完了'的疲惫。"
+  },
+  10: {
+    name_en:"Ten", name_zh:"十",
+    stage_en:"Culmination — the cycle complete. Maximum expression of the suit, for better or worse.",
+    stage_zh:"圆满——循环完成。这一花色的最大表达，无论好坏。",
+    shadow_en:"Overflow — too much of even a good thing becomes burden. Or refusal to acknowledge the cycle has actually ended.",
+    shadow_zh:"过满——即便是好东西，过多也成负担。或者，拒绝承认这一循环其实已经结束。"
+  }
+};
+
+const COURTS = {
+  page: {
+    name_en:"Page", name_zh:"侍从",
+    stage_en:"The student, the messenger, the beginner's curiosity within this suit. New learning is available.",
+    stage_zh:"学徒、信使、这一花色之中的'初学者好奇心'。新的学习正在向你打开。",
+    shadow_en:"Perpetual student-hood as a way to avoid mastery. Or dismissing the beginner's view because you 'already know'.",
+    shadow_zh:"永远当学生，以此回避'真正去精通'；或因'你已经知道'而轻视初学者的视角。"
+  },
+  knight: {
+    name_en:"Knight", name_zh:"骑士",
+    stage_en:"Active pursuit. The one who rides toward the goal. Forward motion within this suit's domain.",
+    stage_zh:"主动的追逐。朝目标策马的人。在这一花色的领域里向前推进。",
+    shadow_en:"Charging without aim, or charging in the wrong direction. The motion that doesn't match the destination.",
+    shadow_zh:"无目标的冲锋；或朝错误方向的冲锋。那种与目的地不匹配的奔走。"
+  },
+  queen: {
+    name_en:"Queen", name_zh:"皇后",
+    stage_en:"Inward mastery. The one who holds this suit's power with grace and depth, not performance.",
+    stage_zh:"内在的精通。以优雅与深度——而非表演——持守这一花色之力量的人。",
+    shadow_en:"Performance of mastery without the inner ground. Or hiding mastery for fear of being seen.",
+    shadow_zh:"'精通'的表演，背后却无真正的内在根基；或因'怕被看见'而隐藏自己的精通。"
+  },
+  king: {
+    name_en:"King", name_zh:"国王",
+    stage_en:"Outward authority. The one who has integrated this suit's power and now stewards it for others.",
+    stage_zh:"外在的权威。已整合这一花色之力量、并为他人守护它的人。",
+    shadow_en:"Authority without humility. Or refusal of the seat — staying in subordinate roles when the work is asking for leadership.",
+    shadow_zh:"不带谦逊的权威；或拒绝那个位置——在工作明明需要你领导时，仍停留在次要的角色里。"
+  }
+};
+
+// Generate the 56 Minor Arcana programmatically
+function buildMinorArcana(){
+  const cards = [];
+  Object.entries(SUITS).forEach(([suitKey, suit])=>{
+    // 10 number cards
+    for (let n = 1; n <= 10; n++){
+      const num = NUMBERS[n];
+      cards.push({
+        suit: suitKey,
+        rank: n,
+        type: "number",
+        key: `${suitKey}_${n}`,
+        en: `${num.name_en} of ${suit.en}`,
+        zh: `${suit.zh}${num.name_zh}`,
+        element: suit.element,
+        perma: suit.perma,
+        csf: suit.csf_link
+      });
+    }
+    // 4 court cards
+    Object.entries(COURTS).forEach(([courtKey, court])=>{
+      cards.push({
+        suit: suitKey,
+        rank: courtKey,
+        type: "court",
+        key: `${suitKey}_${courtKey}`,
+        en: `${court.name_en} of ${suit.en}`,
+        zh: `${suit.zh}${court.name_zh}`,
+        element: suit.element,
+        perma: suit.perma,
+        csf: suit.csf_link
+      });
+    });
+  });
+  return cards;
+}
+
+const MINOR_ARCANA = buildMinorArcana();
+
+const MINOR_SPECIFIC = {
+  wands_1:{upright_en:'A spark that is still only a spark. The Ace of Wands is permission to start before the plan is elegant — a yes to heat, appetite, and the first unpolished move. Today the work is ignition, not architecture.',upright_zh:'还只是一粒火星。权杖王牌是在计划尚未优雅之前就开始的许可——对热度、胃口、以及第一个不修边幅的动作说是。今日的功课是点燃，不是建殿。',shadow_en:'The spark kept in a drawer \'until conditions are right.\' Conditions are rarely right. Reversed, this card asks what you are waiting to feel before you will allow yourself to begin.',shadow_zh:'那粒被收进抽屉、等\'条件成熟\'的火星。条件很少成熟。逆位时，这张牌问你：你在等怎样的感觉到来，才肯允许自己开始？',question_en:'What would I start today if I only needed a spark, not a blueprint?',question_zh:'若我只需要一粒火星、而不需要一张蓝图，今日我会开始什么？',mantra_en:'Strike the match. Refine later.',mantra_zh:'先划着火柴，再谈打磨。'},
+  wands_2:{upright_en:'The world is in your hands and you have not yet chosen a horizon. Two of Wands is the restless pause before departure — vision without motion. Look farther than the room you are standing in.',upright_zh:'世界在你掌中，而地平线尚未被选定。权杖二是出发前那份坐立不安的停顿——有远见、尚未迈步。把目光投到你此刻所站的房间之外。',shadow_en:'Planning as a substitute for leaving. Or clinging to the familiar balcony because the view from here is already impressive. The world in your hands is useless if the feet never move.',shadow_zh:'用计划代替离开。或因\'此处风景已足够好看\'而守着熟悉的阳台。掌中的世界，若双脚永不移动，便毫无用处。',question_en:'Which horizon have I been surveying without stepping toward?',question_zh:'哪一道地平线，我一直在远望、却未曾朝它迈步？',mantra_en:'A view is not a voyage.',mantra_zh:'风景不是航程。'},
+  wands_3:{upright_en:'Ships on the water — the first proof that the risk was real. Three of Wands is early expansion: your work has left the harbor. Do not pull it back for more polishing. Watch, then send the next ship.',upright_zh:'水面上的船——冒险已成真的第一份证据。权杖三是早期的扩张：你的工作已离港。不要为了再打磨而把它拽回来。看一看，然后派出下一艘。',shadow_en:'Impatience with the voyage, or refusing to look at what is actually returning. Early success can make you micromanage the fleet. Let the ships do the work they were sent to do.',shadow_zh:'对航程不耐烦；或拒绝去看真正正在返航之物。早期的成功会让你去微观管理整支船队。让船去做它们被派出要做的事。',question_en:'What has already left the harbor that I am still trying to control from the dock?',question_zh:'什么已经离港，而我却仍想在码头上控制它？',mantra_en:'Watch the water. Send the next ship.',mantra_zh:'看水面，派下一艘。'},
+  wands_4:{upright_en:'A threshold decorated for arrival. Four of Wands is celebration that is earned — community, home, a structure stable enough to feast under. Mark the milestone before you invent the next climb.',upright_zh:'一道为抵达而装饰的门槛。权杖四是挣来的庆祝——共同体、家园、一个稳到可以在其下设宴的结构。在你发明下一次攀登之前，先标记这座里程碑。',shadow_en:'Skipping the feast to get back to work, or turning every gathering into a performance. Joy that cannot be received is not humility — it is a refusal of completion.',shadow_zh:'跳过宴席赶回去干活；或把每一次聚会变成一场表演。无法被领受的喜悦，不是谦逊——是对完成的拒绝。',question_en:'What milestone am I treating as \'not yet enough\' that actually deserves a toast?',question_zh:'哪一座里程碑被我当成\'还不够\'——而它其实值得一杯酒？',mantra_en:'Stop and mark the gate.',mantra_zh:'停下来，给这道门做个记号。'},
+  wands_5:{upright_en:'Five wands crossing — contest, sparring, the noisy workshop of competing ideas. This is not war. It is heat that can sharpen if you stay in the ring without needing to win the room.',upright_zh:'五根权杖相交——较量、对招、彼此竞争的念头在喧闹的工坊里碰撞。这不是战争。这是一份热度：若你留在场中、又不需要赢下整间屋子，它能把你磨利。',shadow_en:'Turning sparring into score-settling, or leaving the ring so no one can touch you. Conflict avoided becomes conflict stored. Stay long enough to learn what the friction is teaching.',shadow_zh:'把对招变成算账；或离开场地，好让谁也碰不到你。被回避的冲突会变成被储存的冲突。多留一会儿，看清这摩擦在教你什么。',question_en:'Where am I fighting to be right instead of fighting to get sharper?',question_zh:'我在何处是为了\'我是对的\'而战，而不是为了把自己磨利而战？',mantra_en:'Spar. Don\'t scorched-earth.',mantra_zh:'对招即可，不必焦土。'},
+  wands_6:{upright_en:'A public ride home after a hard contest. Six of Wands is recognition — not vanity if it is true. Let the win be seen. Then dismount before the parade becomes your personality.',upright_zh:'一场艰苦较量之后的公开归途。权杖六是被看见——若它是真的，便不是虚荣。让这份赢被看见。然后在游行变成你的人格之前，下马。',shadow_en:'Starving for applause, or choking on it. Reversed, ask whether you are working for the work or for the crowd at the gate. Both distortions empty the victory.',shadow_zh:'渴求掌声，或被掌声噎住。逆位时，问自己：你是为事情本身而做，还是为门口的人群而做？两种扭曲都会掏空这场胜利。',question_en:'Whose recognition would actually nourish me — and whose would only inflate me?',question_zh:'谁的认可真正能滋养我——谁的，只会把我吹胀？',mantra_en:'Receive the parade. Then get off the horse.',mantra_zh:'领受游行，然后下马。'},
+  wands_7:{upright_en:'High ground, many incoming shafts. Seven of Wands is the defense of what you have already claimed. Not every challenge deserves a speech. Hold the hill that is actually yours.',upright_zh:'高地，许多射来的杆。权杖七是对你已认领之物的守护。不是每一次挑战都值得一篇演说。守住那座真正属于你的山丘。',shadow_en:'Defending out of habit — every hill, every slight. Or collapsing the moment pushback arrives. Discern which ground is worth the sweat, and release the rest without a press release.',shadow_zh:'出于习惯的防守——每一座山、每一句轻慢。或一遇阻力就塌。分辨哪一块地值得流汗，其余的，不必发声明便可放下。',question_en:'Which hill is actually mine — and which am I defending only because I am already standing on it?',question_zh:'哪座山丘真正是我的——哪座，只因我已经站在上面，才在守？',mantra_en:'Defend the real hill.',mantra_zh:'只守真正的那座山。'},
+  wands_8:{upright_en:'Wands in flight. Eight of Wands is velocity — messages, travel, things arriving faster than your commentary can keep up. Today, do not add process to what is already moving. Clear the runway.',upright_zh:'飞行中的权杖。权杖八是速度——消息、行程、快到你的评论跟不上的到来。今日，不要给已经在动的东西再加流程。清出跑道。',shadow_en:'Rush that pretends to be progress, or delay dressed as quality control. If everything is urgent, nothing is. Name the one moving piece that actually matters and escort it through.',shadow_zh:'假装成进展的仓促；或打扮成质量控制的拖延。若一切都紧急，便没有紧急。点名那一件真正要紧的移动之物，护送它通过。',question_en:'What is already in motion that I keep interrupting with \'just one more check\'?',question_zh:'什么已经在动，而我却不断用\'再检查一次\'去打断它？',mantra_en:'Clear the runway.',mantra_zh:'清出跑道。'},
+  wands_9:{upright_en:'Wounded, still standing, the last wand in hand. Nine of Wands is stamina after cost. You do not need a new war. You need to keep the boundary you already paid for.',upright_zh:'带伤，仍站着，最后一根杖在手。权杖九是付过代价之后的耐力。你不需要一场新的战争。你需要守住那条你已经为之付过账的边界。',shadow_en:'Hypervigilance that cannot come off duty, or dropping the guard one day too soon. Rest is not betrayal of the watch. A sentry who never sleeps eventually guards nothing well.',shadow_zh:'下不了岗的过度警觉；或过早放下守卫。休息不是对守望的背叛。永不睡眠的哨兵，最终什么也守不好。',question_en:'Where am I still armored against a battle that has already ended?',question_zh:'我在何处仍为着一场已经结束的战役披着甲？',mantra_en:'Keep the boundary. Take the helmet off.',mantra_zh:'边界要守，盔甲可摘。'},
+  wands_10:{upright_en:'A bundle so large you cannot see over it. Ten of Wands is responsibility at the edge of capacity. Some of those wands were never yours. Set two down before you call it loyalty.',upright_zh:'一捆大到你无法从上面看出去的杖。权杖十是抵达容量边缘的责任。其中有些杖从来不是你的。先放下两根，再谈忠诚。',shadow_en:'Martyrdom mistaken for work ethic, or dumping the whole bundle in resentment. The integration is an audit: which loads did you pick up to be needed? Return those.',shadow_zh:'把殉道误认作职业道德；或一怒之下把整捆扔掉。整合是一次审计：哪些担子是你为了\'被需要\'才捡起来的？那些，还回去。',question_en:'Which two loads could I set down today without the world ending?',question_zh:'哪两副担子，我今日放下，世界也不会停转？',mantra_en:'Put two down. Then walk.',mantra_zh:'先放下两根，再走。'},
+  wands_page:{upright_en:'A message of fire arriving in a young hand. The Page of Wands is beginner\'s heat — a new project, a new appetite, a letter that wants answering with motion rather than a committee.',upright_zh:'一封由年轻的手送来的火讯。权杖侍从是初学者的热度——新项目、新胃口、一封需要用行动而非用委员会去回复的信。',shadow_en:'Endless enthusiasm with no first hour of craft. Or dismissing the new idea because it arrived without credentials. Give the spark one real afternoon before you judge it.',shadow_zh:'无尽的热情，却没有手艺的第一个小时。或因新想法没有资历而轻视它。先给这粒火星一个真正的下午，再评判它。',question_en:'What new heat am I treating as \'not serious enough\' to schedule?',question_zh:'哪一团新的热，被我当成\'不够严肃\'而不肯排进日程？',mantra_en:'Answer the letter with motion.',mantra_zh:'用行动回那封信。'},
+  wands_knight:{upright_en:'The charge. Knight of Wands is appetite on horseback — fast, vivid, incomplete. Use the heat to cover ground. Do not use it to start four fires and tend none.',upright_zh:'冲锋。权杖骑士是骑在马上的胃口——快、鲜明、尚未完成。用这热度去覆盖地面。不要用它同时点四堆火、一堆也不看守。',shadow_en:'Impulse branded as courage, or courage delayed until the mood returns. Knights who only ride when inspired never finish a campaign. Ride the dull mile too.',shadow_zh:'被贴上勇气商标的冲动；或把勇气推迟到情绪回来之时。只在有灵感时才上马的骑士，完成不了一场战役。沉闷的那一英里，也要骑。',question_en:'Where is my heat starting fires I have no intention of sitting with?',question_zh:'我的热度在何处点着了我不打算看守的火？',mantra_en:'One fire. Ride it through.',mantra_zh:'一堆火，骑到底。'},
+  wands_queen:{upright_en:'Warmth that does not perform. The Queen of Wands holds creative fire as atmosphere — confidence without the speech. Today, occupy your own room fully. Let people feel the heat without a demonstration.',upright_zh:'不表演的温暖。权杖皇后把创造之火当成气氛来持守——自信，不必演说。今日，把你自己的房间完全住满。让人感到热，而不必演示。',shadow_en:'Charisma used as cover, or dimming so no one calls you too much. Both are fear of being seen at full temperature. The work is to be warm without managing the audience.',shadow_zh:'把魅力当掩护来用；或把自己调暗，以免被说\'太多了\'。两者都是害怕被人以完整的温度看见。功课是温暖，而不去管理观众。',question_en:'Where am I turning down my temperature so the room stays comfortable?',question_zh:'我在何处调低自己的温度，好让房间继续舒服？',mantra_en:'Be the warmth. Skip the show.',mantra_zh:'做那份暖，不必做场。'},
+  wands_king:{upright_en:'Directed fire. The King of Wands stewards vision so others can move. Authority here is not volume — it is the willingness to point at a horizon and then be the one who does not flinch first.',upright_zh:'被引导的火。权杖国王守护远见，好让他人能移动。这里的权威不是音量——是指着一道地平线、并且自己不先眨眼的意愿。',shadow_en:'Vision without follow-through, or ruling by heat alone. A king who only inspires and never decides leaves a court of confusion. Choose, then stand where you pointed.',shadow_zh:'有远见无下文；或只靠热度统治。一个只会点燃、从不决断的国王，留下的是迷茫的宫廷。选定，然后站在你所指之处。',question_en:'What am I pointing others toward that I have not yet fully chosen myself?',question_zh:'我指给别人的方向，自己是否尚未完全选定？',mantra_en:'Point. Then stand there first.',mantra_zh:'先指向，自己先站到。'},
+  cups_1:{upright_en:'A cup offered from the unseen. The Ace of Cups is feeling arriving before language — a thaw, an opening, a yes in the chest. Do not immediately turn it into a plan. Receive it.',upright_zh:'一只从不可见处递来的杯。圣杯王牌是语言之前先到达的感受——一次解冻、一次打开、胸腔里的一声是。不要立刻把它变成计划。先领受。',shadow_en:'A closed cup held politely. Or flooding the room with feeling so no one can meet you. The gift is overflow that has a rim. Today, notice whether you are sealed or spilling.',shadow_zh:'礼貌地盖着的杯。或把感受漫出房间，使谁也无法与你相遇。礼物是有杯沿的满溢。今日，看清你是封死的，还是在泼洒。',question_en:'What feeling is trying to arrive that I keep converting into a task?',question_zh:'什么感受正试图到来，而我却不断把它改写成一项任务？',mantra_en:'Take the cup before you name it.',mantra_zh:'先接过杯，再给它名字。'},
+  cups_2:{upright_en:'Two cups meeting. Two of Cups is reciprocity — not fusion. A clean exchange of regard, attraction, alliance. Today asks whether the bond in front of you is mutual or merely hoped-for.',upright_zh:'两杯相遇。圣杯二是互惠——不是融合。一份干净的敬意、吸引、同盟的交换。今日要问：眼前这纽带是相互的，还是只被盼望着。',shadow_en:'One-way pouring dressed as romance or loyalty. Or refusing a real meeting because it would require being seen. Equality is the test, not intensity.',shadow_zh:'被打扮成浪漫或忠诚的单向倾注。或因将被看见而拒绝一次真正的相遇。检验的是平等，不是强度。',question_en:'Is this exchange mutual — or am I the only one holding a cup out?',question_zh:'这交换是相互的吗——还是只有我把杯子递了出去？',mantra_en:'Meet. Don\'t merge.',mantra_zh:'相遇，不必融合。'},
+  cups_3:{upright_en:'Shared wine, raised arms. Three of Cups is friendship as medicine — the particular joy that only happens in a circle. Isolate less today. Celebrate something small with someone real.',upright_zh:'共享的酒，举起的手臂。圣杯三是作为良药的友谊——那种只在圆圈里发生的喜悦。今日少一点孤立。与一个真实的人，庆祝一件小事。',shadow_en:'Performing belonging, or excluding yourself from the toast because you \'should be working.\' Loneliness is sometimes a schedule problem. Put one name on the calendar.',shadow_zh:'表演归属；或因\'该工作\'而不举杯。孤独有时是日程问题。在日历上写下一个名字。',question_en:'Who would I toast with today if I stopped treating joy as unproductive?',question_zh:'若我不再把喜悦当成不生产，今日我会与谁举杯？',mantra_en:'Raise one real glass.',mantra_zh:'举起一只真的杯。'},
+  cups_4:{upright_en:'A fourth cup offered; three already sit ignored. Four of Cups is satiety that has gone numb — not ingratitude exactly, but the inability to taste what is here. Look again at the ordinary gift.',upright_zh:'第四只杯递来；三只已被无视。圣杯四是饱和之后的麻木——未必是忘恩，而是尝不出此处已有之物。再看一眼那份普通的礼物。',shadow_en:'Apathy as identity, or snatching every new cup to outrun boredom. Both miss the same thing: attention is what makes a cup worth drinking. Return to one that is already in reach.',shadow_zh:'把冷漠当成身份；或抓住每一只新杯以逃离无聊。两者错过的是同一件事：注意力，才使一杯值得被饮。回到那只已在手边的。',question_en:'What am I refusing because it arrived without novelty?',question_zh:'什么被我拒绝，只因它到来时不够新？',mantra_en:'Drink what is already poured.',mantra_zh:'喝已经倒好的。'},
+  cups_5:{upright_en:'Three spilled, two still standing. Five of Cups is grief with a periphery — loss that is real, and remainder that is also real. Mourn what tipped. Then turn enough to see what did not.',upright_zh:'三只倾覆，两只仍立。圣杯五是带有边缘的悲伤——失去是真的，剩余也是真的。哀悼倒下的。然后转过身，去看未曾倒下的。',shadow_en:'Living inside the spill so completely that the standing cups become invisible. Or skipping grief and calling it resilience. You can face the river without camping in the wreckage.',shadow_zh:'完全住进倾覆里，使仍立的杯变得不可见。或跳过悲伤并称之为韧性。你可以面对那条河，而不在残骸里扎营。',question_en:'What is still standing that my grief will not let me count?',question_zh:'什么仍立着——而我的悲伤不许我去数它？',mantra_en:'Mourn. Then turn.',mantra_zh:'先哀悼，再转身。'},
+  cups_6:{upright_en:'A child offering flowers from an old garden. Six of Cups is memory as nourishment — innocence revisited without being trapped there. Take what was kind from the past. Leave what was small.',upright_zh:'一个孩子从旧花园里递来花。圣杯六是作为滋养的记忆——重访天真，而不困在那里。从过去取走那份善。留下那份小。',shadow_en:'Nostalgia as a hiding place, or rewriting the past so it cannot instruct you. Memory is a well, not a house. Draw water; do not move in.',shadow_zh:'把怀旧当藏身之所；或改写过去，使它无法再教导你。记忆是一口井，不是一栋房。打水，不要搬进去住。',question_en:'What from earlier in my life still wants to be received — not relived?',question_zh:'生命更早的时候，有什么仍想被领受——而不是被重演？',mantra_en:'Draw water from the well. Don\'t move in.',mantra_zh:'打井水，不搬进去。'},
+  cups_7:{upright_en:'Seven cups in a cloud — visions, temptations, possible lives. Seven of Cups is imagination before choice. Beautiful. Also fog. Name which cup is desire and which is decoration.',upright_zh:'云中七杯——幻象、诱惑、可能的人生。圣杯七是选择之前的想象。美。也是雾。点名哪一只杯是欲望，哪一只只是装饰。',shadow_en:'Option-hoarding until none can be drunk. Or grabbing the shiniest cup to end the anxiety of choosing. Fantasy that never lands becomes a second job. Pick one and taste it.',shadow_zh:'囤积选项直到一只也喝不成。或抓起最亮的那只，以结束选择的焦虑。永不落地的幻想会变成第二份工作。选一只，尝尝。',question_en:'Which option am I keeping open only so I don\'t have to commit to a real one?',question_zh:'哪个选项被我留着，只为了不必对一个真实的选项承诺？',mantra_en:'Choose one cup. Drink.',mantra_zh:'选一只杯，喝。'},
+  cups_8:{upright_en:'Walking away from a row of cups, one already empty. Eight of Cups is the dignified departure — leaving what was good enough but no longer true. The moonlit path costs you the familiar shore.',upright_zh:'离开一排水杯，其中一只已空。圣杯八是有尊严的离开——离开那份曾足够好、却不再为真之物。月下的路，代价是熟悉的岸。',shadow_en:'Leaving in a sulk rather than a choice, or staying because leaving would disappoint the row. If you go, go clean. If you stay, stay without the fantasy of someday walking.',shadow_zh:'赌气地离开，而非选择地离开；或因离开会让那一排失望而留下。若走，走干净。若留，留下，而不再幻想着\'有一天会走\'。',question_en:'What am I staying in that I have already emotionally left?',question_zh:'什么地方，我人还在，而心已经离开？',mantra_en:'Leave clean, or stay without the exit fantasy.',mantra_zh:'干净地离开，或留下并不再幻想出口。'},
+  cups_9:{upright_en:'A satisfied figure, cups arrayed like a completed wish. Nine of Cups is contentment that is allowed — the rare skill of being pleased. Enjoy the arrangement. Do not immediately raise the bar.',upright_zh:'一个满足的人，杯子如已完成的愿望排列。圣杯九是被允许的满足——那种罕见的、能感到满意的技能。享受这布置。不要立刻把标杆再抬高。',shadow_en:'Smugness, or an inability to admit that something actually went well. Pleasure that must be earned twice is not pleasure. Let a good evening be a good evening.',shadow_zh:'自满；或无法承认有些事其实已经顺利。必须被赚取两次的愉悦，不是愉悦。让一个好晚上，就是一个好晚上。',question_en:'Where am I refusing to be pleased because pleased feels like stopping?',question_zh:'我在何处拒绝感到满意——只因满意像是停下来？',mantra_en:'Let the wish stay granted.',mantra_zh:'让愿望保持被准许。'},
+  cups_10:{upright_en:'A home under a rainbow of cups. Ten of Cups is belonging at full expression — family in the wide sense. The work today is to inhabit the bonds you already have, not to shop for a more cinematic one.',upright_zh:'杯虹之下的家园。圣杯十是归属的完整表达——广义的家。今日的功课是住进你已有的纽带，而不是去采购一个更电影感的。',shadow_en:'Performing the happy house, or discarding a real home because it is not the postcard. Full cups still require washing. Presence is the rainbow, not the picture of one.',shadow_zh:'表演幸福的房子；或因真实的家不是明信片而丢弃它。满杯仍需要洗。临在才是那道虹，不是虹的照片。',question_en:'Which bond am I under-inhabiting while I search for a more perfect picture of belonging?',question_zh:'哪一条纽带，我住得不够——同时却在寻找一张更完美的归属照片？',mantra_en:'Live in the house you already have.',mantra_zh:'住进你已经有的那栋房子。'},
+  cups_page:{upright_en:'A young messenger studying a fish in a cup — wonder at feeling itself. The Page of Cups is the beginner\'s heart: a poem, an apology, a strange dream worth writing down before it evaporates.',upright_zh:'年轻的信使端详杯中之鱼——对感受本身的惊奇。圣杯侍从是初学者的心：一首诗、一句道歉、一个值得在蒸发前写下来的怪梦。',shadow_en:'Sentimentality without courage, or mocking your own softness so no one else can. The small message is often the true one. Send it before you make it clever.',shadow_zh:'没有勇气的感伤；或先嘲笑自己的柔软，以免别人来嘲笑。小小的那句，常常是真的那句。在你把它变聪明之前，先送出去。',question_en:'What small, slightly embarrassing message wants to be sent as it is?',question_zh:'哪一句小小的、略尴尬的话，想按原样被送出？',mantra_en:'Send the unpolished note.',mantra_zh:'送出那封未打磨的短讯。'},
+  cups_knight:{upright_en:'A calm horse, a cup held level. The Knight of Cups rides for feeling with courtesy — invitation, art, the offer made beautifully. Today, bring the gift. Do not lecture about the gift.',upright_zh:'一匹平静的马，一杯端平的酒。圣杯骑士为感受而行，带着礼节——邀请、艺术、被漂亮递出的给予。今日，把礼物带来。不必演讲礼物。',shadow_en:'Charm as strategy, or mood as compass with no map. Romance toward a person or a project is not the same as showing up on the dull days. Level the cup and keep riding.',shadow_zh:'把魅力当策略；或把心情当没有地图的罗盘。对一个人或一个项目的浪漫，不等于在沉闷的日子里出现。端平杯子，继续骑。',question_en:'Where am I offering atmosphere instead of presence?',question_zh:'我在何处提供的是气氛，而不是临在？',mantra_en:'Bring the cup. Stay for the meal.',mantra_zh:'把杯带来，留下来吃饭。'},
+  cups_queen:{upright_en:'The sea in a single cup. The Queen of Cups is emotional literacy — feeling held so it can be useful to others and to yourself. Today, listen beneath the words, including your own.',upright_zh:'海盛在一只杯里。圣杯皇后是情感的识字力——感受被持住，才能对他人与自己有用。今日，听言辞之下的东西，包括你自己的。',shadow_en:'Absorbing everyone\'s weather until you disappear, or closing so tightly that intuition has no door. Empathy without a shoreline becomes flood. Keep one foot on stone.',shadow_zh:'吸收所有人的天气直到自己消失；或关得太紧，使直觉没有门。没有岸线的共情会成洪水。一只脚要留在石头上。',question_en:'Whose feelings am I carrying that are not mine to carry?',question_zh:'谁的感受被我扛着——而那本不该由我扛？',mantra_en:'Feel it. Keep a shoreline.',mantra_zh:'感受它，留一条岸。'},
+  cups_king:{upright_en:'A seated sovereign of the inner tide. The King of Cups governs feeling without being governed by it — diplomacy, counsel, the steady hand in a weather system. Offer that steadiness today.',upright_zh:'内在潮汐的坐着的主权者。圣杯国王治理感受，而不被感受治理——外交、劝告、天气系统里那只稳的手。今日提供那份稳。',shadow_en:'Emotional control as shutdown, or wise-person performance that never risks a real feeling. Mastery is not numbness. Let one true thing be visible while you hold the rest.',shadow_zh:'把情绪控制变成关闭；或表演智者，从不冒险露出真感受。精通不是麻木。让一件真的事被看见，同时持住其余。',question_en:'Where am I being \'calm\' as a way of not being touched?',question_zh:'我在何处用\'冷静\'作为不被触碰的方法？',mantra_en:'Steady is not sealed.',mantra_zh:'稳，不是封。'},
+  swords_1:{upright_en:'A sword through a crown, offered from a cloud. The Ace of Swords is a clean cut of mind — truth arriving with an edge. Name the thing. Ambiguity is not kindness when it is fear.',upright_zh:'云中递来的、穿过王冠的剑。宝剑王牌是心智干净的一斩——带着锋刃到达的真相。把那件事说出来。当含糊是恐惧时，它就不是仁慈。',shadow_en:'A blade used to win rather than to clarify, or a truth so delayed it rusts. Insight that is not spoken becomes anxiety. Make one precise sentence today.',shadow_zh:'用来赢而不是用来澄清的刃；或被推迟到生锈的真相。不被说出口的洞见会变成焦虑。今日造一个精确的句子。',question_en:'What true sentence have I been softening until it means nothing?',question_zh:'哪一句真话，被我软化到已经什么也不表示了？',mantra_en:'One clean sentence.',mantra_zh:'一句干净的话。'},
+  swords_2:{upright_en:'A blindfolded figure, two swords crossed. Two of Swords is a truce with a decision — peace purchased by not looking. The water is already moving behind you. Lift the blindfold a little.',upright_zh:'蒙眼的人，两剑相交。宝剑二是与决定达成的停战——用\'不看\'买来的平静。水已在你身后流动。把眼罩掀起一点。',shadow_en:'Stalemate as lifestyle, or forcing a binary because sitting in tension is unbearable. Not-choosing is leaking energy in both directions. Set a time by which the blindfold comes off.',shadow_zh:'把僵局过成生活方式；或因无法忍受张力而强行二分。不选择是在两个方向同时漏能。给眼罩的除去设一个时限。',question_en:'What am I keeping in balance only by refusing to look at it?',question_zh:'什么被我维持着平衡——只因我拒绝看它？',mantra_en:'Set a time to see.',mantra_zh:'设一个看清的时限。'},
+  swords_3:{upright_en:'Three swords through a heart in rain. Three of Swords is grief that has become thinkable — heartbreak with language. Do not spiritualize it away. Let the weather do what weather does, then speak one true thing about it.',upright_zh:'雨中三剑穿心。宝剑三是已变得可被思想的悲伤——有语言的心碎。不要用灵性把它解释掉。让天气做天气做的事，然后关于它说一句真话。',shadow_en:'Rumination posing as processing, or a story of betrayal that you keep sharpening. Pain that is endlessly narrated never completes. Write it once. Then close the book for today.',shadow_zh:'把反刍假装成处理；或一把被你不断磨尖的背叛叙事。被无尽讲述的痛，完成不了。写一次。今日把书合上。',question_en:'Am I telling the story to heal it, or to keep the blade in?',question_zh:'我讲述这个故事，是为了愈合，还是为了让刃留在里面？',mantra_en:'Name the wound. Stop retelling it today.',mantra_zh:'给伤口命名。今日不再复述。'},
+  swords_4:{upright_en:'A knight at rest in a closed room, swords waiting. Four of Swords is sanctioned stillness — recovery as strategy, not laziness. Your mind has been in the field. Give it a stone bed for a while.',upright_zh:'封闭房间里安息的骑士，剑在等候。宝剑四是被批准的静止——作为策略的恢复，不是懒。你的心智一直在战场。给它一张石床，一会儿。',shadow_en:'Collapse called rest, or refusing rest because the war might miss you. A mind that never sheathes the sword starts cutting its owner. Schedule vacancy, not just tasks.',shadow_zh:'把崩溃叫作休息；或因战争可能想你而拒绝休息。永不入鞘的心智，开始割伤它的主人。把空白排进日程，不只把任务排进去。',question_en:'Where is rest still something I have to earn, rather than something the work requires?',question_zh:'休息在何处仍是我必须赚取的，而不是工作本身所要求的？',mantra_en:'Sheathe the sword for an hour.',mantra_zh:'让剑入鞘一个小时。'},
+  swords_5:{upright_en:'A figure collecting fallen swords while others walk away. Five of Swords is a win that costs the room. Being right and being alone often arrive together. Ask whether this argument needed a victor.',upright_zh:'一人拾起落下的剑，其他人走开。宝剑五是以房间为代价的赢。正确与孤单常常一起到。问一问这场争论是否需要一个胜者。',shadow_en:'Picking up every fight, or surrendering your position to keep a false peace. Some hills are vanity. Some silences are self-erasure. Discern which this one is before you swing.',shadow_zh:'捡起每一场架；或放弃立场以维持虚假的和平。有些山丘是虚荣。有些沉默是自我擦除。在挥剑之前分辨这是哪一种。',question_en:'If I win this, who leaves the field — and do I want that field?',question_zh:'若我赢了这个，谁会离开场地——而我还要那块场地吗？',mantra_en:'Win fewer rooms.',mantra_zh:'少赢几间屋子。'},
+  swords_6:{upright_en:'A boat, water, swords carried upright toward another shore. Six of Swords is passage — leaving a hard mental climate with what you have learned still in the hull. You do not have to be finished to depart.',upright_zh:'一只船，水面，剑直立着被带往另一岸。宝剑六是渡过——带着仍在船舱里的所学，离开一种艰难的心智气候。你不必完成了才能出发。',shadow_en:'Dragging the old argument into the new city, or refusing the crossing because the far shore is unnamed. Transition is not betrayal of the past. Pack the swords. Leave the swamp.',shadow_zh:'把旧争论拖进新城市；或因对岸未命名而拒绝渡过。过渡不是对过去的背叛。把剑装上船。离开那片沼。',question_en:'What mental climate am I still living in, though my body has already left?',question_zh:'哪种心智气候，我还住在里面——尽管身体已经离开？',mantra_en:'Cross. Bring the lesson, not the swamp.',mantra_zh:'渡过。带上功课，别带沼泽。'},
+  swords_7:{upright_en:'A figure slipping away with an armful of swords. Seven of Swords is strategy in the shadows — cunning, exit, the unofficial plan. Sometimes this is wisdom. Sometimes it is the habit of never being catchable.',upright_zh:'一人抱剑溜走。宝剑七是阴影里的策略——机巧、退出、非正式的计划。有时这是智慧。有时这是\'永不被抓住\'的习惯。',shadow_en:'Secrecy as default, or accusing others of games you are playing. If you must move quietly, know why. Hidden strategy that has no sunset date becomes a second self.',shadow_zh:'把隐秘当默认；或指责他人玩着你正在玩的游戏。若必须安静地移动，要知道为何。没有日落期限的隐藏策略，会变成第二个自己。',question_en:'What am I handling sideways that could actually survive being said?',question_zh:'什么事被我侧着处理——而它其实说出来也能活？',mantra_en:'If you sneak, know the reason.',mantra_zh:'若要悄悄走，先知道理由。'},
+  swords_8:{upright_en:'Bound, blindfolded, swords planted around — and the bindings look loose. Eight of Swords is a prison of interpretation. The restriction may be real. The totality of it is usually a story. Test one bar.',upright_zh:'被缚、蒙眼、剑环立——而绳子看起来是松的。宝剑八是解释造成的监狱。限制可能是真的。它的\'全然性\'通常是一个故事。试一根栏杆。',shadow_en:'Learned helplessness, or refusing help because the identity of \'trapped\' has become familiar. One small unauthorized movement is how cages become visible as cages.',shadow_zh:'习得的无助；或因\'被困\'的身份已变熟悉而拒绝帮助。一个小小的、未被批准的动作，能让笼子显现为笼子。',question_en:'Which bar of this cage have I never actually pushed?',question_zh:'这笼子的哪一根栏杆，我从未真正推过？',mantra_en:'Push one bar.',mantra_zh:'推一根栏杆。'},
+  swords_9:{upright_en:'A figure sitting up from a bed carved with swords — 3 a.m. mind. Nine of Swords is rumination at full volume. The thoughts are not all true just because they are loud. Get them out of the dark: write, speak, walk.',upright_zh:'从刻满剑的床上坐起的人——凌晨三点的心智。宝剑九是最大音量的反刍。念头不会因为响就全部为真。把它们带出黑暗：写、说、走。',shadow_en:'Anxiety as proof of conscientiousness, or shame about having a night mind. Neither helps. Contain the hour: give the worry a page, then give the body morning.',shadow_zh:'把焦虑当尽责的证据；或为有一颗夜间的心而羞耻。两者都无益。给这小时一个容器：把担忧交给一页纸，再把身体交给早晨。',question_en:'Which nighttime sentence would look smaller if I wrote it in daylight?',question_zh:'哪一句夜里的话，若写在日光里，会显得更小？',mantra_en:'Put the 3 a.m. sentence on paper.',mantra_zh:'把凌晨三点的那句写在纸上。'},
+  swords_10:{upright_en:'A figure under ten swords — the worst image in the suit, and also an ending. Ten of Swords is the mind\'s catastrophe completing itself. It is over. Stop poking the last sword. Begin the unglamorous getting up.',upright_zh:'十剑之下的人——这花色里最糟的图像，也是一个结束。宝剑十是心智灾难完成了它自己。它结束了。不要再去捅最后那一剑。开始那并不光彩的起身。',shadow_en:'Identifying with the piercing so the story never ends, or declaring yourself finished when you are only exhausted. Endings in this suit are mental. Get off the ground even if the narrative protests.',shadow_zh:'与被刺穿认同，使故事永不结束；或在仅仅是耗尽时便宣布自己完了。这花色里的终结是心智的。即使叙事在抗议，也从地上起来。',question_en:'What ending am I keeping half-alive by rehearsing how bad it was?',question_zh:'哪个结束，被我用\'它有多糟\'的排练维持在半活状态？',mantra_en:'The last sword is already in. Get up.',mantra_zh:'最后一剑已在。起来。'},
+  swords_page:{upright_en:'A young figure with a sword too new to be casual. The Page of Swords is curiosity with an edge — questions, research, the first draft of a position. Ask. Then listen to the answer you did not expect.',upright_zh:'一个持着新到还不能随意使用之剑的年轻人。宝剑侍从是带刃的好奇——提问、研究、立场的初稿。去问。然后听那个你没预料到的回答。',shadow_en:'Interrogation posing as curiosity, or collecting facts to avoid a feeling. A question that is actually a verdict is not a question. Soften the wrist. Keep the point.',shadow_zh:'把审讯假装成好奇；或收集事实以回避感受。其实是判决的问题，不是问题。手腕放松。锋尖保留。',question_en:'What do I keep \'researching\' so I don\'t have to know?',question_zh:'什么事被我不停\'研究\'，好让自己不必知道？',mantra_en:'Ask a real question. Wait.',mantra_zh:'问一个真问题。等。'},
+  swords_knight:{upright_en:'A charging mind. The Knight of Swords is intellect at speed — argument, advocacy, the cutting through. Useful when the air is stale. Dangerous when the destination has not been named.',upright_zh:'冲锋的心智。宝剑骑士是速度中的智识——辩论、倡议、切开。空气陈腐时有用。目的地尚未被命名时危险。',shadow_en:'Winning the sentence and losing the relationship. Or silencing your own blade because sharpness feels unkind. Precision is a kindness when it is in service of something. Aim first.',shadow_zh:'赢了句子，输了关系。或因锋利显得不仁慈而收起自己的刃。当精确服务于某物时，它是一种仁慈。先瞄准。',question_en:'What am I cutting through — and did I name the destination first?',question_zh:'我在切开什么——而我是否先命名了目的地？',mantra_en:'Aim, then ride.',mantra_zh:'先瞄准，再骑。'},
+  swords_queen:{upright_en:'A sovereign of clear air, sword upright, hand open. The Queen of Swords is discernment without cruelty — the person who can say the true thing and still leave your dignity intact. Be her today.',upright_zh:'清气的主权者，剑直立，手张开。宝剑皇后是无残忍的辨识——那个能说真话、并仍把你的尊严留下的人。今日做她。',shadow_en:'Wit as weapon, or honesty so unbuffered it is just aggression. Clarity that cannot include tenderness is incomplete. Cut the knot. Do not cut the person.',shadow_zh:'把机智当武器；或毫无缓冲的诚实，其实只是攻击。不能包含温柔的清明是不完整的。切断结。不要切断人。',question_en:'Can I say the true thing without needing the other person to shrink?',question_zh:'我能否说出真话，而不需要另一个人缩小？',mantra_en:'Clear, and kind enough.',mantra_zh:'清楚，并且足够仁慈。'},
+  swords_king:{upright_en:'The judge of the suit. The King of Swords is principle applied — law, standard, the decision that does not change with the weather of the room. Use this energy to set one rule you will actually keep.',upright_zh:'这花色的裁判。宝剑国王是被应用的原则——法、标准、不随房间天气而变的决定。用这能量去立一条你真正会遵守的规则。',shadow_en:'Dogma in a nice chair, or refusing to decide so no one can appeal. Authority of mind without humility becomes a cold court. Let evidence revise you. Then rule.',shadow_zh:'坐在好看椅子里的教条；或拒绝决定，使谁也不能上诉。没有谦逊的心智权威会变成冷的法庭。让证据修订你。然后裁决。',question_en:'Which standard of mine is still alive — and which is only being enforced out of habit?',question_zh:'我的哪一条标准仍是活的——哪一条只是出于习惯在被执行？',mantra_en:'Rule after you have let evidence in.',mantra_zh:'先让证据进来，再裁决。'},
+  pentacles_1:{upright_en:'A coin offered in a garden. The Ace of Pentacles is a seed of the real — money, body, craft, a door that opens onto matter. Take the seed. Put it in dirt, not in a mood board.',upright_zh:'花园里递来的一枚币。星币王牌是真实的种子——钱、身体、手艺、一扇开向物质的门。接过种子。放进土里，而不是心情板里。',shadow_en:'Opportunity admired and not planted, or grabbing every coin so none can grow. Manifestation without a calendar is daydream. Give the seed a date and a place.',shadow_zh:'被欣赏却未被种下的机会；或抓住每一枚币使谁也不能生长。没有日历的显化是白日梦。给种子一个日期和一个地点。',question_en:'What tangible beginning am I keeping theoretical so I can\'t fail it?',question_zh:'哪个可触摸的开始，被我保持在理论上，好让自己无法失败？',mantra_en:'Put the seed in dirt.',mantra_zh:'把种子放进土里。'},
+  pentacles_2:{upright_en:'A juggler of two coins inside a loop. Two of Pentacles is adaptive stewardship — time, money, energy in motion. Flexibility is the skill. Chaos is not. Keep the dance; drop one extra ball.',upright_zh:'环中抛接两枚币的人。星币二是适应性的看管——运动中的时间、金钱、能量。灵活是技能。混乱不是。保持这舞蹈；放下多出来的那一只球。',shadow_en:'Busy-ness as proof of importance, or rigidity that snaps when a second demand arrives. You can only juggle what you have agreed to. Renegotiate one commitment today.',shadow_zh:'把忙碌当重要性的证据；或在第二个要求到来时折断的僵硬。你只能抛接你已同意的。今日重新谈妥一项承诺。',question_en:'Which ball am I juggling only so no one thinks I dropped it?',question_zh:'哪一只球，我抛着只为了不让人以为我丢了它？',mantra_en:'Drop the extra ball on purpose.',mantra_zh:'有意地放下多的那只球。'},
+  pentacles_3:{upright_en:'Craftsmen at a cathedral. Three of Pentacles is skilled collaboration — your piece fitting into a larger making. Show the work. Let it be critiqued by people who can actually build.',upright_zh:'大教堂里的工匠。星币三是有技艺的协作——你的那一块嵌入更大的制作。把作品拿出来。让真正能建造的人来评。',shadow_en:'Lone-genius theater, or obedience that never offers a better joint. Collaboration is not consensus. Bring your standard into the room and let it meet other standards.',shadow_zh:'孤独天才的剧场；或从不提供更好接合的服从。协作不是共识。把你的标准带进房间，让它与其他标准相遇。',question_en:'Where am I still building alone what wants a second pair of hands?',question_zh:'何处我仍独自建造着那件想要第二双手的东西？',mantra_en:'Show the work to a builder.',mantra_zh:'把作品给一个建造者看。'},
+  pentacles_4:{upright_en:'A figure holding coins against the body. Four of Pentacles is conservation — savings, boundaries around resource, the refusal to leak. Useful. Also a posture that can become a fortress.',upright_zh:'把币贴在身上的人。星币四是守恒——储蓄、资源的边界、拒绝泄漏。有用。这也是一种能变成堡垒的姿态。',shadow_en:'Hoarding as safety, or spending to prove you are not afraid. Security that cannot circulate becomes stagnation. Keep a reserve. Let a measured amount move.',shadow_zh:'把囤积当安全；或用花费证明自己不害怕。不能流通的安全会变成停滞。留储备。让一份被量过的出去。',question_en:'What am I gripping that would be safer if it could move a little?',question_zh:'什么被我握着——若它能稍微流动，会更安全？',mantra_en:'Keep a reserve. Let some move.',mantra_zh:'留储备，让一些流动。'},
+  pentacles_5:{upright_en:'Two figures in snow outside a lit window. Five of Pentacles is scarcity — money, health, belonging — seen from the cold side of the glass. The church light is nearby. Ask. Help is a door, not a verdict on your worth.',upright_zh:'雪中两人，在亮着的窗外。星币五是匮乏——钱、健康、归属——从玻璃的冷的那一侧看见。教堂的光就在近处。去问。帮助是一扇门，不是对你价值的判决。',shadow_en:'Pride that will not knock, or identifying with being the one out in the snow. Hard seasons are real. Permanent exile is often a story. Walk toward the light you can already see.',shadow_zh:'不肯敲门的骄傲；或认同于自己是雪中的那一个。艰难的时节是真的。永久的放逐常常是一个故事。走向你已能看见的光。',question_en:'What help am I refusing because needing it would change my story about myself?',question_zh:'什么帮助被我拒绝——只因需要它会改变我关于自己的故事？',mantra_en:'Knock on the lit door.',mantra_zh:'去敲那扇亮着的门。'},
+  pentacles_6:{upright_en:'Scales, coins given and received. Six of Pentacles is just exchange — generosity with a spine, receiving without collapse. Today, balance the ledger of giving. Include what you never count as a gift.',upright_zh:'天平，给出与收受的币。星币六是公正的交换——有脊骨的慷慨，不崩溃的接受。今日，平衡给予的账。把你从不算作礼物的那些也算进去。',shadow_en:'Charity that keeps the other small, or receiving that never becomes reciprocity. Power hides in who gets to give. Ask whether this exchange leaves both people standing.',shadow_zh:'让对方保持弱小的慈善；或永不变成互惠的接受。权力藏在谁有权给予里。问一问这交换是否让两个人都还站着。',question_en:'In my giving and receiving, who is being kept in which role?',question_zh:'在我的给予与接受里，谁被留在了哪种角色里？',mantra_en:'Give so both can stand.',mantra_zh:'给到两个人都能站着。'},
+  pentacles_7:{upright_en:'A farmer leaning on a tool, looking at young plants. Seven of Pentacles is the long look — assessment of what your labor has actually grown. Patience is not passivity. Decide what to water and what to pull.',upright_zh:'农夫倚着工具，看着幼苗。星币七是长长的一看——评估你的劳动实际长出了什么。耐心不是被动。决定浇什么、拔什么。',shadow_en:'Abandoning the field one season too soon, or waiting forever for a harvest you did not plant well. Review is a verb. Change one input this week.',shadow_zh:'过早一季放弃田地；或永远等待一场你并未种好的收成。审视是一个动词。这周改一个输入。',question_en:'What am I watering out of habit that is not actually growing?',question_zh:'什么被我出于习惯浇着——而它其实没有在长？',mantra_en:'Assess. Then change one input.',mantra_zh:'评估。然后改一个输入。'},
+  pentacles_8:{upright_en:'A bench, a chisel, repeated forms. Eight of Pentacles is apprenticeship in public — the unglamorous hours where skill compounds. Today is for the next careful repetition, not for a new identity.',upright_zh:'一条凳，一把凿，重复的形。星币八是公开的学徒期——技艺在其中复利的、不光彩的小时。今日属于下一次仔细的重复，不属于一个新身份。',shadow_en:'Busywork branded as mastery, or waiting to feel like a master before doing the reps. Craft is offended by both. Do the next one slightly better. Ship it.',shadow_zh:'被贴上精通商标的忙活；或等感到自己已是大师才去做那些重复。手艺对两者都冒犯。把下一个做稍好一点。交付它。',question_en:'What skill would compound if I gave it ten honest repetitions today?',question_zh:'哪一项技艺，若今日给它十次诚实的重复，便会开始复利？',mantra_en:'Ten honest reps.',mantra_zh:'十次诚实的重复。'},
+  pentacles_9:{upright_en:'A woman in a garden of her own growing, a falcon on her wrist. Nine of Pentacles is self-sufficient ripeness — wealth as cultivated life, not display. Enjoy what your discipline grew. You do not need a witness.',upright_zh:'女人在自己种成的园中，腕上有鹰。星币九是自足的成熟——作为被栽培之生活的富，而非展示。享受你的纪律长出的东西。你不需要一个见证者。',shadow_en:'Isolation branded as independence, or luxury used to numb the part that is still hungry. Sufficiency includes the permission to need people. Taste the garden. Open a gate.',shadow_zh:'被贴上独立商标的孤立；或用奢侈麻醉仍饥饿的那部分。充足也包括被允许需要人。尝尝园子。开一扇门。',question_en:'What have I earned that I still will not let myself enjoy without an audience?',question_zh:'什么是我已挣得、却仍不肯在没有观众时享受的？',mantra_en:'Enjoy it without an audience.',mantra_zh:'没有观众也享受它。'},
+  pentacles_10:{upright_en:'An old man, a family, a gate, dogs — lineage made visible. Ten of Pentacles is wealth as a system that outlives you: family, craft, institutions, the long house. Ask what you are building that someone else could inhabit.',upright_zh:'老人、一家人、一道门、狗——可见的传承。星币十是作为比你活得更久之系统的富：家庭、手艺、制度、长房子。问你在建造什么，好让别人也能住进去。',shadow_en:'Clinging to the family script, or refusing inheritance of any kind to stay unbound. Legacy is not a museum. Tend the living system. Renovate what no longer houses anyone well.',shadow_zh:'紧抓家族剧本；或拒绝任何形式的继承以保持不受缚。传承不是博物馆。照看活着的系统。翻修那些不再好好住着人的部分。',question_en:'What am I building that will still be useful when I am not in the room?',question_zh:'我在建造什么——当我不在房间里时它仍有用？',mantra_en:'Build something inhabitable.',mantra_zh:'建造可被住进去的东西。'},
+  pentacles_page:{upright_en:'A young student studying a coin as if it were a text. The Page of Pentacles is apprentice attention — budgets, bodies, tools, the first serious hour with matter. Begin the practical lesson you have been romanticizing.',upright_zh:'年轻的学生把一枚币当文本来读。星币侍从是学徒的注意——预算、身体、工具、与物质共度的第一个认真小时。开始那堂你一直在浪漫化的实务课。',shadow_en:'Endless prep for a craft you will not start, or dismissing humble skill as beneath you. The first ledger, the first stretch, the first repaired object — that is the page\'s work.',shadow_zh:'为一门你不会开始的手艺做无尽准备；或把谦逊的技能视为低于你。第一本账、第一次拉伸、第一件被修好的物件——那才是侍从的功课。',question_en:'What practical lesson am I still treating as less noble than thinking about it?',question_zh:'哪一堂实务课，仍被我当成比思考它更不高贵？',mantra_en:'Start the humble lesson.',mantra_zh:'开始那堂谦逊的课。'},
+  pentacles_knight:{upright_en:'The slowest horse in the deck, and the surest. The Knight of Pentacles is fidelity to the route — same field, same hour, incremental honor. Today, do the unremarkable thing on time.',upright_zh:'牌堆里最慢的马，也是最稳的。星币骑士是对路线的忠——同一块田、同一个小时、增量的荣誉。今日，把那件不显著的事按时做完。',shadow_en:'Stubbornness mistaken for reliability, or reliability so joyless it curdles. Steadiness needs a pulse. Keep the route. Change the song you ride to.',shadow_zh:'把固执误认作可靠；或可靠到无喜而变质。稳需要脉搏。路线保留。换一首骑行时的歌。',question_en:'Where has my reliability become lifeless — and what small pulse could I put back?',question_zh:'我的可靠在何处已变得无生命——我能把怎样的小脉搏放回去？',mantra_en:'Same route. More life in it.',mantra_zh:'同一条路，多一点活。'},
+  pentacles_queen:{upright_en:'A queen among living things, coin in hand, a rabbit at the hem. The Queen of Pentacles is embodied provision — food, money, rooms, care that has texture. Make something actually nourishing today, including for yourself.',upright_zh:'活物中间的皇后，币在手，裙边有兔。星币皇后是有身体的供给——食物、钱、房间、有质地的照料。今日做一件真正滋养的事，包括对你自己。',shadow_en:'Caretaking until empty, or comfort used as postponement of the harder making. Provision is not self-erasure. Feed the household. Keep a plate.',shadow_zh:'照料到空；或把舒适当作对更难之制作的推迟。供给不是自我擦除。喂这个家。给自己留一盘。',question_en:'Who is being provided for — and did I include my own body in the household?',question_zh:'谁在被供给——而我是否把我自己的身体也算进了这个家？',mantra_en:'Set a plate for yourself too.',mantra_zh:'也给自己摆一盘。'},
+  pentacles_king:{upright_en:'A king on a carved throne of vines and coin. The King of Pentacles is material sovereignty — enterprises, land, the long bet kept. Steward what is real. Make one decision that your future body will thank you for.',upright_zh:'坐在藤与币雕成的王座上的国王。星币国王是物质的主权——事业、土地、被守住的长赌。守护真实之物。做一个你未来的身体会感谢的决定。',shadow_en:'Status mistaken for stability, or refusal to claim the seat you have already earned. Kingship here is maintenance plus courage. Sign the thing. Fund the right root.',shadow_zh:'把地位误认作稳定；或拒绝坐上你已挣得的位子。这里的王权是维护加上勇气。把那东西签了。把资金给正确的根。',question_en:'What material decision am I postponing that is already mine to make?',question_zh:'哪个物质上的决定被我推迟着——而它已经是该由我做的？',mantra_en:'Sign the real thing.',mantra_zh:'把那件真实的事签下。'},
+};
+
+
+function minorReading(card, reversed, lang){
+  const suit = SUITS[card.suit];
+  const spec = MINOR_SPECIFIC[card.key];
+  const stage = card.type === "number" ? NUMBERS[card.rank] : COURTS[card.rank];
+  if (spec){
+    if (lang === 'zh'){
+      const body = reversed ? spec.shadow_zh : spec.upright_zh;
+      const extra = reversed
+        ? `逆位时，${suit.zh}的能量（${suit.domain_zh}）被堵塞、过度或用错了地方——不是惩罚，是一张请你调整用法的请柬。`
+        : `${suit.zh}的领域是${suit.domain_zh}。把这张牌当作今日在此领域里的具体作业，而不是一句空泛的性格评语。`;
+      return { head: `${card.zh}（${reversed?'逆位':'正位'}）`, body: body + '\n\n' + extra, psych: spec.question_zh, mantra: spec.mantra_zh, practice: spec.mantra_zh };
+    }
+    const body = reversed ? spec.shadow_en : spec.upright_en;
+    const extra = reversed
+      ? `Reversed, the ${suit.en} current (${suit.domain_en}) is blocked, excessive, or aimed at the wrong altar — not a punishment; an invitation to change how you use it.`
+      : `${suit.en} govern ${suit.domain_en}. Treat this card as today's assignment in that domain, not a vague personality note.`;
+    return { head: `${card.en} (${reversed?'Reversed':'Upright'})`, body: body + '\n\n' + extra, psych: spec.question_en, mantra: spec.mantra_en, practice: spec.mantra_en };
+  }
+  if (lang === 'zh'){
+    if (reversed){
+      return { head: `${card.zh}（逆位）`, body: `${stage.shadow_zh}\n\n这张牌属于${suit.zh}——其领域为${suit.domain_zh}。逆位时，这一花色的能量正以扭曲或被堵塞的方式表达。`, psych: suit.psych_zh, mantra:'', practice:'' };
+    }
+    return { head: `${card.zh}（正位）`, body: `${stage.stage_zh}\n\n这张牌属于${suit.zh}——其领域为${suit.domain_zh}。`, psych: suit.psych_zh, mantra:'', practice:'' };
+  }
+  if (reversed){
+    return { head: `${card.en} (Reversed)`, body: `${stage.shadow_en}\n\nThis card belongs to ${suit.en} — the domain of ${suit.domain_en}. Reversed, the energy this suit represents is expressing in a distorted or blocked way.`, psych: suit.psych_en, mantra:'', practice:'' };
+  }
+  return { head: `${card.en} (Upright)`, body: `${stage.stage_en}\n\nThis card belongs to ${suit.en} — the domain of ${suit.domain_en}.`, psych: suit.psych_en, mantra:'', practice:'' };
+}
+
+// Complete deck
+function buildDeck(){
+  const major = MAJOR_ARCANA.map(c => ({...c, type:"major"}));
+  return [...major, ...MINOR_ARCANA];
+}
+const FULL_DECK = buildDeck();
+/* ============================================================
+   ENGINE — Shuffling, Drawing, Spreads, and Synthesis
+   ============================================================ */
+
+// True randomization using Fisher-Yates with crypto-quality entropy
+function shuffleDeck(deck){
+  const arr = [...deck];
+  // each card also gets a random orientation (upright/reversed)
+  // — but with a slight bias toward upright (60%) to match traditional
+  // weighted shuffling, since traditional decks aren't 50/50 in practice
+  for (let i = arr.length - 1; i > 0; i--){
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  return arr.map(card => ({
+    ...card,
+    reversed: Math.random() < 0.4  // 40% reversal rate — traditional
+  }));
+}
+
+function drawCards(shuffled, n){
+  return shuffled.slice(0, n);
+}
+
+// ===== SPREADS =====
+// Each spread defines positions with bilingual labels and reflection prompts.
+
+const SPREADS = {
+  daily: {
+    name_en: "Daily Draw — One Card",
+    name_zh: "每日一抽 · 单张",
+    intent_en: "A single card to sit with today. Both faces matter — what wants to emerge (upright) and what wants integration (reversed).",
+    intent_zh: "一张牌，与之静坐一日。两面皆有意义——想要浮现之物（正位）与想要被整合之物（逆位）。",
+    positions: [
+      {en:"Today's Mirror", zh:"今日之镜",
+       prompt_en:"What is this card showing me about today, beneath the surface activity?",
+       prompt_zh:"在表面的奔忙之下，这张牌为我映现出今日的什么？"}
+    ]
+  },
+  
+  threecard: {
+    name_en: "Three-Card Spread — Past · Present · Emerging",
+    name_zh: "三张牌阵 · 过往 · 当下 · 涌现",
+    intent_en: "Three cards laid in sequence. Not 'past/present/future' in a predictive sense — but past (what brought you here), present (what is alive now), and emerging (what wants to come next if you allow it).",
+    intent_zh: "依序排开的三张牌。不是预言式的'过去/现在/未来'——而是：过往（什么把你带到此处）、当下（此刻有什么正在鲜活）、涌现（若你允许，接下来什么想要到来）。",
+    positions: [
+      {en:"What brought you here", zh:"将你带到此处的",
+       prompt_en:"The energy or pattern that has been shaping your recent trajectory.",
+       prompt_zh:"塑造你近期轨迹的能量或模式。"},
+      {en:"What is alive now", zh:"当下鲜活的",
+       prompt_en:"The center of gravity in your present moment — what most deserves your attention.",
+       prompt_zh:"你当下的重心所在——最值得你注意之物。"},
+      {en:"What is emerging", zh:"正在涌现的",
+       prompt_en:"What wants to come into being next, if you make room for it.",
+       prompt_zh:"若你为之腾出空间，接下来想要诞生之物。"}
+    ]
+  },
+  
+  shadow: {
+    name_en: "Shadow Integration Spread — Four Cards",
+    name_zh: "阴影整合牌阵 · 四张",
+    intent_en: "A spread specifically for honest self-work. Four cards: the self you present, the shadow material being denied, the gift hidden inside that shadow, and the integration practice.",
+    intent_zh: "一组专为'诚实的自我功夫'而设的牌阵。四张牌：你所呈现的自己、被否认的阴影材料、隐藏于那阴影之中的礼物、以及整合的练习。",
+    positions: [
+      {en:"The Persona", zh:"人格面具",
+       prompt_en:"The face you show — the version of yourself you've made acceptable.",
+       prompt_zh:"你呈现的那张面孔——你已让其变得'可接受'的那个版本的自己。"},
+      {en:"The Shadow", zh:"阴影",
+       prompt_en:"What you have been denying, projecting onto others, or refusing to see in yourself.",
+       prompt_zh:"你一直在否认、投射到他人身上、或拒绝在自身看见之物。"},
+      {en:"The Gift in the Shadow", zh:"阴影中的礼物",
+       prompt_en:"What the shadow is actually carrying for you. Every shadow holds disowned power.",
+       prompt_zh:"阴影实际上为你承载着什么。每一个阴影，都持守着被你弃绝的力量。"},
+      {en:"The Integration", zh:"整合之道",
+       prompt_en:"The next concrete step toward owning what you have disowned.",
+       prompt_zh:"朝着'重新认领你曾弃绝之物'迈出的下一个具体步骤。"}
+    ]
+  },
+  
+  perma: {
+    name_en: "PERMA Spread — Five Cards for the Five Pillars",
+    name_zh: "PERMA 牌阵 · 五张牌对应五支柱",
+    intent_en: "A spread mapping each card to one of Seligman's PERMA pillars of wellbeing. Reveals which pillars are well-tended, which are thin, and where the next deliberate investment should go.",
+    intent_zh: "一组将每张牌映射到 Seligman PERMA 幸福理论之五支柱的牌阵。揭示哪些支柱被悉心照料、哪些薄弱、以及下一次有意识的投入应放在何处。",
+    positions: [
+      {en:"P · Positive Emotion", zh:"P · 积极情绪",
+       prompt_en:"What is your current relationship to joy, gratitude, contentment? Where is the emotional weather?",
+       prompt_zh:"你与喜悦、感恩、满足之间，当下是什么关系？情绪的天气在哪里？"},
+      {en:"E · Engagement / Flow", zh:"E · 投入 / 心流",
+       prompt_en:"Where are you in deep absorption — and where are you absent from your own life?",
+       prompt_zh:"你在何处全然沉浸——又在何处从自己的生活中缺席？"},
+      {en:"R · Relationships", zh:"R · 人际关系",
+       prompt_en:"What is the state of your significant bonds — who is being neglected, who is being held well?",
+       prompt_zh:"你重要的关系处于何种状态？谁被疏于照看，谁被好好抱持？"},
+      {en:"M · Meaning", zh:"M · 意义",
+       prompt_en:"Is your life pointed at something larger than yourself? Where is the thread of purpose?",
+       prompt_zh:"你的生命是否指向某个比自身更大之物？意义的线在哪里？"},
+      {en:"A · Accomplishment", zh:"A · 成就",
+       prompt_en:"What have you completed that you have not yet honored — and what is asking to be finished?",
+       prompt_zh:"你完成了什么却尚未致以敬意？什么在请求被完成？"}
+    ]
+  },
+
+  decision: {
+    name_en: "Decision Spread — Three Cards",
+    name_zh: "抉择牌阵 · 三张",
+    intent_en: "For a live choice. Not 'which option is lucky' — but the situation as it is, what complicates it, and the counsel worth hearing.",
+    intent_zh: "用于一个正在发生的选择。不是'哪个选项幸运'——而是事情的如实样貌、使它复杂之物、以及值得被听见的劝告。",
+    positions: [
+      {en:"The situation as it is", zh:"事情的如实样貌",
+       prompt_en:"Strip the spin. What is actually on the table?",
+       prompt_zh:"去掉修饰。桌上实际是什么？"},
+      {en:"What complicates it", zh:"使它复杂之物",
+       prompt_en:"The hidden cost, fear, or loyalty that keeps the choice sticky.",
+       prompt_zh:"使这选择发黏的隐藏代价、恐惧或忠诚。"},
+      {en:"Counsel", zh:"劝告",
+       prompt_en:"The attitude that would make a clean decision possible today.",
+       prompt_zh:"使今日能做出干净决定的那种态度。"}
+    ]
+  },
+
+  relation: {
+    name_en: "Relational Field — Five Cards",
+    name_zh: "关系场域 · 五张",
+    intent_en: "A map of a bond — romantic, familial, professional. Two people, the field between them, the snag, and the practice.",
+    intent_zh: "一张纽带的地图——爱情、家庭或共事。两个人、他们之间的场、那处绊结、以及练习。",
+    positions: [
+      {en:"You in this bond", zh:"你在这纽带中",
+       prompt_en:"The part of you that is showing up — and the part that is hiding.",
+       prompt_zh:"你正显现的部分——以及正藏着的部分。"},
+      {en:"The other", zh:"对方",
+       prompt_en:"What you are meeting in them, including what you may be projecting.",
+       prompt_zh:"你在对方身上遇见什么，包括你可能正在投射的。"},
+      {en:"The field between", zh:"彼此之间的场",
+       prompt_en:"The weather of the bond itself — not either person alone.",
+       prompt_zh:"这纽带自身的天气——不是任何单独的一方。"},
+      {en:"The snag", zh:"绊结",
+       prompt_en:"Where energy leaks or hardens. The unsaid.",
+       prompt_zh:"能量在何处泄漏或硬化。那句未说出口的。"},
+      {en:"The practice", zh:"练习",
+       prompt_en:"One concrete stance that would make the bond more true.",
+       prompt_zh:"一个能使这纽带更真实的具体姿态。"}
+    ]
+  },
+
+  crossroads: {
+    name_en: "Crossroads — Five Cards",
+    name_zh: "十字路口 · 五张",
+    intent_en: "When two lives are possible. Ground, Path A, Path B, the fear that distorts both, and what wants choosing.",
+    intent_zh: "当两种生活都可能。立足之地、路径甲、路径乙、扭曲二者的恐惧、以及想要被选择之物。",
+    positions: [
+      {en:"Where you actually stand", zh:"你实际所立之处",
+       prompt_en:"The present ground, before either path is romanticized.",
+       prompt_zh:"当下的土地——在任何一条路被浪漫化之前。"},
+      {en:"Path A", zh:"路径甲",
+       prompt_en:"The energy of the first option if you fully inhabit it.",
+       prompt_zh:"若你完全住进第一个选项，它的能量。"},
+      {en:"Path B", zh:"路径乙",
+       prompt_en:"The energy of the second option if you fully inhabit it.",
+       prompt_zh:"若你完全住进第二个选项，它的能量。"},
+      {en:"The distorting fear", zh:"扭曲的恐惧",
+       prompt_en:"What anxiety is doing to both pictures.",
+       prompt_zh:"焦虑正在对两幅图做什么。"},
+      {en:"What wants choosing", zh:"想要被选择的",
+       prompt_en:"Not the safer story — the one that is alive.",
+       prompt_zh:"不是更安全的那个故事——是那个活着的。"}
+    ]
+  },
+};
+
+// ===== SYNTHESIS LAYER =====
+// Connect a drawn card to your other frameworks
+
+function getCardData(card){
+  if (card.type === "major"){
+    return MAJOR_ARCANA.find(c => c.key === card.key);
+  }
+  return null; // minor cards use minorReading()
+}
+
+function permaSummary(cards, lang){
+  // count which PERMA pillars are represented by the cards drawn
+  const tally = {P:0, E:0, R:0, M:0, A:0};
+  cards.forEach(c => { if (c.perma) tally[c.perma]++; });
+  const total = Object.values(tally).reduce((a,b)=>a+b, 0) || 1;
+  const sorted = Object.entries(tally).sort((a,b)=>b[1]-a[1]);
+  const top = sorted[0];
+  const absent = sorted.filter(([k,v])=>v===0).map(([k])=>k);
+  
+  let text;
+  if (lang === 'zh'){
+    text = `今日抽到的牌，主要触及 ${PERMA_LABELS[top[0]].zh}（${PERMA_LABELS[top[0]].en}）—— 这是今日值得格外留意的幸福之维。`;
+    if (absent.length > 0 && absent.length < 5){
+      text += `而 ${absent.map(k=>PERMA_LABELS[k].zh).join('、')} 未被这次抽牌点到——这本身可能就是信息：这些维度今日是否被你忽视了？`;
+    }
+  } else {
+    text = `Today's cards most strongly invoke ${PERMA_LABELS[top[0]].en} — the pillar of wellbeing worth special attention today.`;
+    if (absent.length > 0 && absent.length < 5){
+      text += ` Notably absent: ${absent.map(k=>PERMA_LABELS[k].en).join(', ')} — itself a piece of information. Are these pillars being neglected today?`;
+    }
+  }
+  return text;
+}
+
+function csfSummary(cards, lang){
+  const tally = {EX:0, IN:0, RB:0, ST:0};
+  cards.forEach(c => { if (c.csf) tally[c.csf]++; });
+  const total = Object.values(tally).reduce((a,b)=>a+b, 0) || 1;
+  const sorted = Object.entries(tally).sort((a,b)=>b[1]-a[1]);
+  const top = sorted[0];
+  
+  if (lang === 'zh'){
+    return `今日的牌主要呼唤盖洛普优势的 ${CSF_LABELS[top[0]].zh}（${CSF_LABELS[top[0]].en}）领域。如果你的前五优势中有此领域的主题，今日是它们的舞台；如果没有——这恰是值得调用支撑性主题（第6至10）的时刻。`;
+  }
+  return `Today's cards primarily call on the Gallup ${CSF_LABELS[top[0]].en} domain. If your Top 5 includes themes from this domain, today is their stage. If not — this is exactly the moment to deliberately invoke your supporting themes (#6–10).`;
+}
+
+// Dark Triad / HEXACO H reflection — only triggered when shadow material is heavy
+function shadowReflection(cards, lang){
+  // count reversed cards + Death/Devil/Tower/Moon (shadow-heavy Majors)
+  const shadowKeys = ["death", "devil", "tower", "moon", "hanged_man"];
+  let shadowWeight = 0;
+  cards.forEach(c => {
+    if (c.reversed) shadowWeight += 1;
+    if (c.type === "major" && shadowKeys.includes(c.key)) shadowWeight += 1.5;
+  });
+  
+  if (shadowWeight < 1.5) return null;  // only show when meaningful
+  
+  if (lang === 'zh'){
+    return {
+      head: "阴影材料的提示",
+      body: `今日的牌阵中携带较多阴影材料（${shadowWeight.toFixed(1)} 单位）。这不是坏事——这是一份邀请。
+
+现代人格研究中的"黑暗三角"（自恋、马基雅维利主义、反社会倾向）并非要给人贴标签，而是承认：每个人内在都有一定程度的这些倾向，问题不在于"有没有"，而在于"是否被看见、是否被整合"。被压抑的阴影会无意识地操控你；被看见的阴影则可以被有意识地运用。
+
+与之相对的是 HEXACO 模型的 "H 因子"（诚实-谦逊）——它是与全部三种暗面特质负相关最强的特质。今日，问自己：
+
+· 今日我哪里在表演——而非如实存在？（H 因子的低位）
+· 今日我哪里因为脆弱被触碰，而想要掌控、操纵或胜过他人？（自恋/马基雅维利的提示）
+· 今日我哪里感到情感麻木，而需要重新建立连接？（反社会倾向的反面）
+
+这些不是诊断——是邀请你与那些更难看见的部分照面。`
+    };
+  }
+  
+  return {
+    head: "Shadow Material — A Note",
+    body: `Today's spread carries significant shadow material (${shadowWeight.toFixed(1)} units). This is not a bad thing — it is an invitation.
+
+Modern personality research's "Dark Triad" (Narcissism, Machiavellianism, Psychopathy) is not about labeling people. It is the acknowledgment that everyone carries some degree of these tendencies; the question is not "do I have them" but "are they seen and integrated?" A repressed shadow runs you unconsciously; a seen shadow can be consciously deployed.
+
+The counterweight is HEXACO's H-factor (Honesty-Humility) — the trait most strongly negatively correlated with all three dark traits. Today, ask yourself:
+
+· Where today am I performing rather than being? (Low H-factor)
+· Where today am I being touched somewhere vulnerable, and reaching for control, manipulation, or one-upmanship? (Narcissism/Machiavellianism signal)
+· Where today have I gone emotionally numb, and need to reconnect? (The opposite of Psychopathy)
+
+These are not diagnoses — they are invitations to look at the parts harder to see.`
+  };
+}
+
+
+function cardTitle(card, lang){
+  if (card.type === "major"){
+    const d = getCardData(card);
+    return lang==='zh' ? d.zh : d.en;
+  }
+  return lang==='zh' ? card.zh : card.en;
+}
+
+function elementalBalance(cards, lang){
+  const tally = {fire:0,water:0,air:0,earth:0};
+  cards.forEach(c => { if (c.element) tally[c.element]++; });
+  const entries = Object.entries(tally).sort((a,b)=>b[1]-a[1]);
+  const top = entries[0];
+  const missing = entries.filter(([k,v])=>v===0).map(([k])=>k);
+  const el = ELEMENTS[top[0]];
+  if (lang==='zh'){
+    let t = `元素上，今日偏 ${el.zh}（${el.trait_zh}）。`;
+    if (missing.length) t += `未被点到的是 ${missing.map(k=>ELEMENTS[k].zh).join('、')} —— 可问：这些质地今日是否恰好缺席？`;
+    return t;
+  }
+  let t = `Elementally, today leans ${el.en} (${el.trait_en}).`;
+  if (missing.length) t += ` Absent: ${missing.map(k=>ELEMENTS[k].en).join(', ')} — itself a question: are these textures missing from the day?`;
+  return t;
+}
+
+function majorMinorMix(cards, lang){
+  const majors = cards.filter(c=>c.type==='major');
+  const revs = cards.filter(c=>c.reversed).length;
+  if (lang==='zh'){
+    let t = majors.length
+      ? `大阿卡纳 ${majors.length} 张（${majors.map(c=>getCardData(c).zh).join('、')}）——课题偏原型、偏生命尺度，不只是事务。`
+      : `此次未抽到大阿卡纳——课题更可能在日常的用处与习惯里，而不在命运的转折上。`;
+    t += ` 逆位 ${revs}/${cards.length}。逆位不是凶——是请你从内侧、从被忽略的那面去读。`;
+    return t;
+  }
+  let t = majors.length
+    ? `${majors.length} Major Arcana (${majors.map(c=>getCardData(c).en).join(', ')}) — the work is archetypal, life-scale, not merely logistical.`
+    : `No Major Arcana in this draw — the work is likely in habit and use, not in a mythic turning.`;
+  t += ` ${revs}/${cards.length} reversed. Reversal is not omen — it is an instruction to read from the inner or neglected face.`;
+  return t;
+}
+
+function narrativeThread(cards, lang){
+  if (cards.length < 2) return null;
+  const a = cardTitle(cards[0], lang);
+  const b = cardTitle(cards[cards.length-1], lang);
+  if (lang==='zh'){
+    return `从第一张「${a}」到末张「${b}」：前者是入口，后者是今日若允许，事情想抵达的姿态。不必把中间每张都串成故事；问一句即可——若入口是真的，末张所要求的那一步，我是否肯走？`;
+  }
+  return `From the first card (${a}) to the last (${b}): the first is the door; the last is the stance the day wants if you allow it. You do not need a novel. One question is enough — if the door is true, will I take the step the last card asks?`;
+}
+
+function firstPractice(cards, lang){
+  const card = cards[0];
+  if (card.type === "major"){
+    const d = getCardData(card);
+    return lang==='zh' ? d.mantra_zh : d.mantra_en;
+  }
+  const spec = MINOR_SPECIFIC[card.key];
+  if (spec) return lang==='zh' ? spec.mantra_zh : spec.mantra_en;
+  return "";
+}
+
+// Odyssey-style values check — meaning & values reflection
+function valuesReflection(cards, lang){
+  // any major arcana with PERMA = "M" (meaning) or significant cards prompts this
+  const meaningCards = cards.filter(c =>
+    (c.type === "major" && c.perma === "M") ||
+    (c.type === "major" && ["fool","hierophant","lovers","hermit","wheel","death","judgement","world"].includes(c.key))
+  );
+  
+  if (meaningCards.length === 0) return null;
+  
+  if (lang === 'zh'){
+    return {
+      head: "价值观与意义之透镜",
+      body: `今日抽到的牌中，至少有一张正在邀请你触及"意义"这一层。这与你曾在 Odyssey 项目中处理过的核心问题是同一脉相承——不是"我能做什么"，而是"我究竟为何而做"。
+
+借此机会，今日花五分钟写下：
+
+1. 我今日要做的事情中，有哪一件是与我最深的价值观对齐的？（如果一件都没有——这本身就是该被注意的信息。）
+
+2. 我今日避免做的事情中，有哪一件其实是在保护我重要的价值观？（拒绝、说不、给某事画下边界，也是价值观的表达。）
+
+3. 假设今日是十年后的我回望的一天——这一天里有什么会让那个我感到骄傲？
+
+这些问题不需要立刻有答案。让它们与今日同行。`
+    };
+  }
+  
+  return {
+    head: "Values & Meaning — A Lens",
+    body: `At least one of today's cards is touching the layer of "meaning." This is the same territory you have worked with through Odyssey-style frameworks — not "what can I do" but "what am I actually doing this for."
+
+Take five minutes today to write:
+
+1. Of the things I plan to do today, which one is most aligned with my deepest values? (If the answer is "none" — that is itself information worth noticing.)
+
+2. Of the things I am avoiding today, which is actually protecting something I value? (Saying no, drawing a boundary, refusing — these are also expressions of values.)
+
+3. Imagine the version of me ten years from now looking back at this day. What in today would make that version of me proud?
+
+These questions don't need immediate answers. Let them walk with you through the day.`
+  };
+}
+/* ============================================================
+   APP CONTROLLER — The Work of Days
+   ============================================================ */
+
+
+const HIST_KEY = 'workofdays_hist_v2';
+
+function loadHist(){
+  try { return JSON.parse(localStorage.getItem(HIST_KEY) || '[]'); } catch(e){ return []; }
+}
+function saveHistEntry(){
+  const row = {
+    t: Date.now(),
+    lang: LANG,
+    spread: STATE.spread,
+    intent: STATE.intent,
+    cards: STATE.drawn.map(c => ({key:c.key, type:c.type, reversed:!!c.reversed, en:c.en, zh:c.zh}))
+  };
+  const hist = loadHist().filter(x => x.t !== row.t);
+  hist.unshift(row);
+  localStorage.setItem(HIST_KEY, JSON.stringify(hist.slice(0, 24)));
+}
+function replayHist(i){
+  const row = loadHist()[i];
+  if (!row) return;
+  STATE.phase = 'reading';
+  STATE.spread = row.spread;
+  STATE.intent = row.intent || '';
+  STATE.drawn = row.cards.map(mini => {
+    const full = FULL_DECK.find(c => c.key === mini.key) || mini;
+    return {...full, reversed: mini.reversed};
+  });
+  STATE.revealedIdx = STATE.drawn.length - 1;
+  render();
+  window.scrollTo(0,0);
+}
+function encodeShare(){
+  const payload = {
+    s: STATE.spread,
+    i: STATE.intent,
+    l: LANG,
+    c: STATE.drawn.map(c => c.key + (c.reversed ? 'r' : 'u'))
+  };
+  return location.origin + location.pathname + '#r=' + encodeURIComponent(btoa(unescape(encodeURIComponent(JSON.stringify(payload)))));
+}
+function tryLoadShare(){
+  const h = location.hash || '';
+  if (!h.startsWith('#r=')) return false;
+  try{
+    const payload = JSON.parse(decodeURIComponent(escape(atob(decodeURIComponent(h.slice(3))))));
+    STATE.spread = SPREADS[payload.s] ? payload.s : 'daily';
+    STATE.intent = payload.i || '';
+    LANG = payload.l === 'zh' ? 'zh' : 'en';
+    document.body.classList.toggle('zh', LANG==='zh');
+    ['en','zh'].forEach(x => {
+      const b = document.getElementById('btn-'+x);
+      if (b) b.classList.toggle('on', x===LANG);
+    });
+    STATE.drawn = (payload.c||[]).map(token => {
+      const reversed = token.endsWith('r');
+      const key = token.slice(0,-1);
+      const full = FULL_DECK.find(c => c.key === key);
+      return full ? {...full, reversed} : null;
+    }).filter(Boolean);
+    if (!STATE.drawn.length) return false;
+    STATE.phase = 'reading';
+    STATE.revealedIdx = STATE.drawn.length-1;
+    return true;
+  } catch(e){ return false; }
+}
+function toast(msg){
+  let el = document.getElementById('toast');
+  if (!el){
+    el = document.createElement('div');
+    el.id = 'toast';
+    el.className = 'toast';
+    document.body.appendChild(el);
+  }
+  el.textContent = msg;
+  el.classList.add('show');
+  setTimeout(()=>el.classList.remove('show'), 1800);
+}
+async function copyShare(){
+  const url = encodeShare();
+  try { await navigator.clipboard.writeText(url); toast(Tn('Link copied','链接已复制')); }
+  catch(e){ prompt(Tn('Copy this link','复制此链接'), url); }
+}
+function copyReadingText(){
+  const sp = SPREADS[STATE.spread];
+  let t = Tn(sp.name_en, sp.name_zh) + '\n';
+  if (STATE.intent) t += Tn('Intention: ','意图：') + STATE.intent + '\n';
+  t += '\n';
+  STATE.drawn.forEach((card,i)=>{
+    const pos = sp.positions[i];
+    t += `${i+1}. ${Tn(pos.en,pos.zh)} — ${cardTitle(card,LANG)} (${card.reversed?Tn('Reversed','逆位'):Tn('Upright','正位')})\n`;
+  });
+  t += '\n' + Tn('The Work of Days','日课塔罗');
+  const ta = document.createElement('textarea');
+  ta.value = t;
+  document.body.appendChild(ta);
+  ta.select();
+  document.execCommand('copy');
+  ta.remove();
+  toast(Tn('Reading copied','解读已复制'));
+}
+
+let LANG = 'en';
+let STATE = {
+  phase: 'intent',  // intent → shuffle → reading → reflection
+  spread: 'daily',
+  intent: '',
+  shuffled: [],
+  drawn: [],
+  revealedIdx: -1
+};
+
+const Tn = (en, zh) => LANG === 'zh' ? zh : en;
+
+function setLang(l){
+  LANG = l;
+  ['en','zh'].forEach(x => document.getElementById('btn-'+x).classList.toggle('on', x===l));
+  document.body.classList.toggle('zh', l==='zh');
+  render();
+}
+
+// ============================================================
+// PHASE: INTENT
+// ============================================================
+function renderIntent(){
+  const c = document.getElementById('content');
+  c.innerHTML = `
+    <div class="card altar">
+      <div class="eyebrow">${Tn('Step One · Sit With the Question','第一步 · 与问题静坐')}</div>
+      <h2>${Tn('What are you carrying today?','你今日所承载的是什么？')}</h2>
+      <div class="zh-h">${Tn(
+        "Before drawing any card, articulate what you actually want to look at. The intention shapes what the cards can mirror. Be honest — vague intentions get vague readings.",
+        "在抽任何一张牌之前，请说清你究竟想看什么。意图塑造着牌所能映现的内容。请诚实——模糊的意图换来模糊的解读。"
+      )}</div>
+      
+      <textarea id="intent-input" placeholder="${Tn(
+        "e.g., 'I need clarity on the conversation with X tomorrow' / 'I keep avoiding the question of what to do about Y' / 'I want to know what wants my attention today.'",
+        "例如：'我需要对明天与 X 的谈话有清明' / '我一直在回避关于 Y 该怎么办的问题' / '我想知道今日什么想要我的注意。'"
+      )}" rows="4">${STATE.intent || ''}</textarea>
+      
+      <div class="spread-section">
+        <div class="eyebrow">${Tn('Step Two · Choose the Spread','第二步 · 选择牌阵')}</div>
+        <div class="spread-grid">
+          ${Object.entries(SPREADS).map(([key, sp])=>`
+            <button class="spread-card ${STATE.spread===key?'sel':''}" onclick="selectSpread('${key}')">
+              <div class="sp-cards">${'★'.repeat(sp.positions.length)}</div>
+              <div class="sp-name">${Tn(sp.name_en, sp.name_zh)}</div>
+              <div class="sp-intent">${Tn(sp.intent_en, sp.intent_zh)}</div>
+            </button>
+          `).join('')}
+        </div>
+      </div>
+      
+      <button class="btn" onclick="enterShuffle()">${Tn('Enter the Deck →','进入牌堆 →')}</button>
+    </div>
+    
+    <div class="card" id="hist-card" style="display:none">
+      <div class="eyebrow">${Tn('Recent sittings · this browser only','近几次静坐 · 仅存本机')}</div>
+      <h2>${Tn('Return to a previous draw','回到先前的一次抽取')}</h2>
+      <div class="hist-list" id="hist-list"></div>
+    </div>
+    <div class="card philo">
+      <div class="eyebrow">${Tn('A note on what this is','关于这个工具的说明')}</div>
+      <p>${Tn(
+        "Tarot is not prediction. It is a structured technology for self-reflection — the cards are 78 archetypal images, refined over six centuries, that act as a mirror to what is already moving in you. Carl Jung saw the major arcana as a visual map of the collective unconscious; modern coaching uses similar archetypal work daily.",
+        "塔罗不是预言。它是一种结构化的自我反思技术——这78张牌是经六个世纪精炼的原型图像，作为一面镜子，映照你内在已经在涌动之物。Carl Jung 视大阿卡纳为'集体无意识'的视觉地图；现代教练实践每日运用相似的原型工作。"
+      )}</p>
+      <p>${Tn(
+        "The randomization is the point: by bypassing your conscious 'I already know what I think,' it lets material rise that the analytical mind would have filtered out. Pair this with frameworks you already use — Gallup strengths, PERMA, your own values work — and the tarot becomes one more lens, not a substitute for thinking.",
+        "随机性正是关键所在：通过绕过你那套'我已经知道我怎么想'的意识防御，它让那些被分析心智过滤掉的材料得以浮现。把它与你已在使用的框架并置——盖洛普优势、PERMA、你自己的价值观工作——塔罗便成为另一面透镜，而非思考的替代。"
+      )}</p>
+    </div>
+  `;
+  const hist = loadHist();
+  const box = document.getElementById('hist-card');
+  const list = document.getElementById('hist-list');
+  if (box && list && hist.length){
+    box.style.display = '';
+    list.innerHTML = hist.slice(0,8).map((h,i)=>{
+      const when = new Date(h.t).toLocaleString(LANG==='zh'?'zh-CN':'en-US', {month:'short',day:'numeric',hour:'2-digit',minute:'2-digit'});
+      const names = (h.cards||[]).map(c => LANG==='zh' ? (c.zh||c.key) : (c.en||c.key)).join(' · ');
+      const sp = SPREADS[h.spread];
+      const spn = sp ? Tn(sp.name_en, sp.name_zh) : h.spread;
+      return `<button class="hist-item" onclick="replayHist(${i})">
+        <div><div class="hist-meta">${when} · ${spn}</div>
+        <div class="hist-intent">${escapeHtml((h.intent||'').slice(0,80)) || names}</div></div>
+      </button>`;
+    }).join('');
+  }
+}
+
+function selectSpread(key){
+  STATE.spread = key;
+  renderIntent();
+}
+
+function enterShuffle(){
+  const ta = document.getElementById('intent-input');
+  STATE.intent = ta ? ta.value.trim() : '';
+  STATE.phase = 'shuffle';
+  STATE.shuffled = shuffleDeck(FULL_DECK);
+  const n = SPREADS[STATE.spread].positions.length;
+  STATE.drawn = drawCards(STATE.shuffled, n);
+  STATE.revealedIdx = -1;
+  render();
+}
+
+// ============================================================
+// PHASE: SHUFFLE (animated, minimal)
+// ============================================================
+function renderShuffle(){
+  const c = document.getElementById('content');
+  const n = STATE.drawn.length;
+  
+  c.innerHTML = `
+    <div class="card altar">
+      <div class="eyebrow">${Tn('Step Three · The Cards Are Drawn','第三步 · 牌已抽出')}</div>
+      <h2>${Tn('Reveal one at a time, with attention','一张一张地翻开，带着觉知')}</h2>
+      <div class="zh-h">${Tn(
+        "The cards have been shuffled and laid. Before you reveal each one, take a breath. Read its position prompt first. Then turn it over and sit with the image before reading the interpretation.",
+        "牌已被洗过，并依序铺开。在你翻开每一张之前，先呼吸一次。先读它的位置含义。然后翻开它，与那个图像静坐片刻，再去读解读。"
+      )}</div>
+      
+      ${STATE.intent ? `<div class="intent-recall"><div class="ir-label">${Tn('Your intention:','你的意图：')}</div><div class="ir-body">${escapeHtml(STATE.intent)}</div></div>` : ''}
+      
+      <div class="cards-row">
+        ${STATE.drawn.map((card, i)=>{
+          const pos = SPREADS[STATE.spread].positions[i];
+          const isRevealed = i <= STATE.revealedIdx;
+          return `<div class="card-slot">
+            <div class="slot-label">
+              <div class="slot-num">${i+1}</div>
+              <div class="slot-name">${Tn(pos.en, pos.zh)}</div>
+            </div>
+            <div class="card-img ${isRevealed?'revealed':''} ${card.reversed?'reversed':''}" onclick="revealCard(${i})">
+              ${isRevealed ? cardFace(card) : cardBack()}
+            </div>
+            ${isRevealed ? `<div class="slot-orient">${card.reversed ? Tn('Reversed','逆位') : Tn('Upright','正位')}</div>` : ''}
+          </div>`;
+        }).join('')}
+      </div>
+      
+      ${STATE.revealedIdx >= STATE.drawn.length - 1 ? `
+        <button class="btn" onclick="enterReading()">${Tn('Read the Cards →','深入解读 →')}</button>
+      ` : `
+        <div class="hint">${Tn(
+          STATE.revealedIdx < 0 
+            ? "Tap a card to begin revealing — start with the first."
+            : `Tap card #${STATE.revealedIdx + 2} when ready.`,
+          STATE.revealedIdx < 0
+            ? "点击牌面开始翻开——从第一张开始。"
+            : `准备好时，点击第 ${STATE.revealedIdx + 2} 张牌。`
+        )}</div>
+        <div class="btnrow" style="justify-content:center">
+          <button class="btn ghost" onclick="revealAll()">${Tn('Reveal all','一次翻开')}</button>
+        </div>
+      `}
+    </div>
+  `;
+}
+
+function revealCard(i){
+  if (i <= STATE.revealedIdx + 1){
+    STATE.revealedIdx = Math.max(STATE.revealedIdx, i);
+    render();
+  }
+}
+function revealAll(){
+  STATE.revealedIdx = STATE.drawn.length - 1;
+  render();
+}
+
+function cardBack(){
+  return `<div class="card-back">
+    <svg viewBox="0 0 100 160" xmlns="http://www.w3.org/2000/svg">
+      <rect x="3" y="3" width="94" height="154" rx="6" fill="#1c1812" stroke="#c9a227" stroke-width="1.5"/>
+      <rect x="8" y="8" width="84" height="144" rx="3" fill="none" stroke="#c9a227" stroke-width="0.5" opacity="0.5"/>
+      <circle cx="50" cy="80" r="22" fill="none" stroke="#c9a227" stroke-width="1" opacity="0.6"/>
+      <circle cx="50" cy="80" r="14" fill="none" stroke="#c9a227" stroke-width="0.5" opacity="0.4"/>
+      <path d="M50,58 L54,80 L72,80 L57,93 L62,114 L50,101 L38,114 L43,93 L28,80 L46,80 Z" 
+            fill="#c9a227" opacity="0.7"/>
+    </svg>
+  </div>`;
+}
+
+function cardFace(card){
+  const isMajor = card.type === "major";
+  const data = isMajor ? getCardData(card) : null;
+  const color = isMajor ? '#c9a227' : 
+    card.suit === 'wands' ? '#c45c3a' :
+    card.suit === 'cups' ? '#4a6cc4' :
+    card.suit === 'swords' ? '#d4a017' :
+    '#2e9e7f';
+  
+  const name = Tn(card.en || (data && data.en) || '', card.zh || (data && data.zh) || '');
+  const numDisplay = isMajor ? `<text x="50" y="22" text-anchor="middle" font-family="Fraunces, serif" font-size="11" fill="${color}" font-style="italic">${data.n}</text>` : '';
+  
+  return `<div class="card-face" style="border-color:${color}">
+    <svg viewBox="0 0 100 160" xmlns="http://www.w3.org/2000/svg">
+      <rect x="2" y="2" width="96" height="156" rx="5" fill="#211d17" stroke="${color}" stroke-width="1.5"/>
+      ${numDisplay}
+      <g transform="translate(50, 80)">
+        ${cardGlyph(card, color)}
+      </g>
+      <text x="50" y="148" text-anchor="middle" font-family="Fraunces, serif" font-size="9" fill="${color}">
+        ${Tn(card.en || (data?data.en:''), '')}
+      </text>
+    </svg>
+    <div class="card-label" style="color:${color}">${name}</div>
+  </div>`;
+}
+
+// Symbolic glyphs for each card — minimalist, evocative
+function cardGlyph(card, color){
+  if (card.type === "major"){
+    return majorGlyph(card.key, color);
+  }
+  return minorGlyph(card.suit, card.rank, color);
+}
+
+function majorGlyph(key, c){
+  const glyphs = {
+    fool: `<circle r="18" fill="none" stroke="${c}" stroke-width="1"/><path d="M-10,5 L0,-10 L10,5" fill="none" stroke="${c}" stroke-width="1.5"/>`,
+    magician: `<line x1="-12" y1="-12" x2="12" y2="-12" stroke="${c}" stroke-width="1.5"/><line x1="0" y1="-12" x2="0" y2="14" stroke="${c}" stroke-width="1.5"/><circle r="3" cy="-12" fill="${c}"/>`,
+    high_priestess: `<line x1="-10" y1="-15" x2="-10" y2="15" stroke="${c}" stroke-width="2"/><line x1="10" y1="-15" x2="10" y2="15" stroke="${c}" stroke-width="2"/><circle cy="0" r="5" fill="none" stroke="${c}" stroke-width="1"/>`,
+    empress: `<circle r="14" fill="none" stroke="${c}" stroke-width="1"/><path d="M0,-8 Q-8,0 0,8 Q8,0 0,-8" fill="${c}" opacity="0.4"/>`,
+    emperor: `<rect x="-12" y="-14" width="24" height="28" fill="none" stroke="${c}" stroke-width="1.5"/><line x1="-12" y1="-6" x2="12" y2="-6" stroke="${c}" stroke-width="1"/>`,
+    hierophant: `<line x1="-10" y1="-14" x2="-10" y2="14" stroke="${c}" stroke-width="1.5"/><line x1="10" y1="-14" x2="10" y2="14" stroke="${c}" stroke-width="1.5"/><line x1="0" y1="-16" x2="0" y2="14" stroke="${c}" stroke-width="2"/><line x1="-5" y1="-10" x2="5" y2="-10" stroke="${c}" stroke-width="1"/>`,
+    lovers: `<circle cx="-7" cy="0" r="6" fill="none" stroke="${c}" stroke-width="1.2"/><circle cx="7" cy="0" r="6" fill="none" stroke="${c}" stroke-width="1.2"/><path d="M-3,0 L3,0" stroke="${c}" stroke-width="1.5"/>`,
+    chariot: `<rect x="-12" y="-5" width="24" height="15" fill="none" stroke="${c}" stroke-width="1.5"/><circle cx="-8" cy="13" r="3" fill="none" stroke="${c}"/><circle cx="8" cy="13" r="3" fill="none" stroke="${c}"/>`,
+    strength: `<path d="M-12,3 Q-12,-10 0,-10 Q12,-10 12,3 Q12,12 0,12 Q-12,12 -12,3 Z" fill="none" stroke="${c}" stroke-width="1.5"/><path d="M-4,0 Q0,4 4,0" stroke="${c}" stroke-width="1" fill="none"/>`,
+    hermit: `<path d="M-2,-15 L-2,5 L-8,15 M-2,-15 L8,-5" stroke="${c}" stroke-width="1.5" fill="none"/><circle cx="10" cy="-6" r="3" fill="${c}" opacity="0.7"/>`,
+    wheel: `<circle r="15" fill="none" stroke="${c}" stroke-width="1.5"/><line x1="-15" y1="0" x2="15" y2="0" stroke="${c}" stroke-width="0.8"/><line x1="0" y1="-15" x2="0" y2="15" stroke="${c}" stroke-width="0.8"/><line x1="-11" y1="-11" x2="11" y2="11" stroke="${c}" stroke-width="0.8"/>`,
+    justice: `<line x1="0" y1="-15" x2="0" y2="10" stroke="${c}" stroke-width="2"/><line x1="-12" y1="-8" x2="12" y2="-8" stroke="${c}" stroke-width="1"/><circle cx="-10" cy="-3" r="3" fill="none" stroke="${c}"/><circle cx="10" cy="-3" r="3" fill="none" stroke="${c}"/>`,
+    hanged_man: `<line x1="0" y1="-16" x2="0" y2="-2" stroke="${c}" stroke-width="1.5"/><circle cy="2" r="5" fill="none" stroke="${c}" stroke-width="1.5"/><path d="M-5,8 L0,12 L5,8 M0,5 L-7,15 M0,5 L7,15" stroke="${c}" stroke-width="1.2" fill="none"/>`,
+    death: `<path d="M-12,-8 L0,-15 L12,-8 L8,8 L-8,8 Z" fill="none" stroke="${c}" stroke-width="1.5"/><circle cx="-4" cy="-3" r="1.5" fill="${c}"/><circle cx="4" cy="-3" r="1.5" fill="${c}"/>`,
+    temperance: `<path d="M-10,-10 L-5,5 L5,-5 L10,10" stroke="${c}" stroke-width="1.5" fill="none"/><circle cx="-10" cy="-10" r="3" fill="none" stroke="${c}"/><circle cx="10" cy="10" r="3" fill="none" stroke="${c}"/>`,
+    devil: `<path d="M-8,-12 L-12,-16 M8,-12 L12,-16" stroke="${c}" stroke-width="1.5"/><circle r="10" fill="none" stroke="${c}" stroke-width="1.5"/><circle cx="-3" cy="-2" r="1" fill="${c}"/><circle cx="3" cy="-2" r="1" fill="${c}"/>`,
+    tower: `<rect x="-8" y="-12" width="16" height="22" fill="none" stroke="${c}" stroke-width="1.5"/><path d="M-12,-15 L-2,-8" stroke="${c}" stroke-width="2"/><path d="M2,15 L-5,12 M5,-2 L9,2" stroke="${c}" stroke-width="1" fill="none"/>`,
+    star: `<path d="M0,-15 L4,-5 L14,-5 L6,1 L9,11 L0,5 L-9,11 L-6,1 L-14,-5 L-4,-5 Z" fill="${c}" opacity="0.6"/>`,
+    moon: `<path d="M-3,-12 A12,12 0 1,0 -3,12 A8,8 0 1,1 -3,-12 Z" fill="${c}" opacity="0.7"/>`,
+    sun: `<circle r="9" fill="${c}" opacity="0.7"/><line x1="0" y1="-15" x2="0" y2="-11" stroke="${c}" stroke-width="1.5"/><line x1="0" y1="11" x2="0" y2="15" stroke="${c}" stroke-width="1.5"/><line x1="-15" y1="0" x2="-11" y2="0" stroke="${c}" stroke-width="1.5"/><line x1="11" y1="0" x2="15" y2="0" stroke="${c}" stroke-width="1.5"/><line x1="-11" y1="-11" x2="-8" y2="-8" stroke="${c}" stroke-width="1.5"/><line x1="11" y1="11" x2="8" y2="8" stroke="${c}" stroke-width="1.5"/><line x1="-11" y1="11" x2="-8" y2="8" stroke="${c}" stroke-width="1.5"/><line x1="11" y1="-11" x2="8" y2="-8" stroke="${c}" stroke-width="1.5"/>`,
+    judgement: `<path d="M-12,8 L-6,-12 L6,-12 L12,8 Z" fill="none" stroke="${c}" stroke-width="1.5"/><line x1="0" y1="-12" x2="0" y2="-18" stroke="${c}" stroke-width="2"/><circle cy="-18" r="2" fill="${c}"/>`,
+    world: `<ellipse rx="14" ry="10" fill="none" stroke="${c}" stroke-width="1.5"/><circle r="3" fill="${c}" opacity="0.7"/><path d="M0,-14 L0,-10 M0,10 L0,14 M-14,0 L-10,0 M10,0 L14,0" stroke="${c}" stroke-width="1"/>`
+  };
+  return glyphs[key] || `<circle r="10" fill="${c}" opacity="0.5"/>`;
+}
+
+function minorGlyph(suit, rank, c){
+  const elem = {
+    wands: `<line x1="-3" y1="-12" x2="3" y2="12" stroke="${c}" stroke-width="2"/><circle cx="-3" cy="-12" r="2" fill="${c}"/>`,
+    cups: `<path d="M-8,-5 Q-8,8 0,8 Q8,8 8,-5 Z" fill="none" stroke="${c}" stroke-width="1.5"/><line x1="0" y1="8" x2="0" y2="12" stroke="${c}"/>`,
+    swords: `<line x1="0" y1="-15" x2="0" y2="10" stroke="${c}" stroke-width="2"/><line x1="-5" y1="-5" x2="5" y2="-5" stroke="${c}" stroke-width="1.5"/>`,
+    pentacles: `<circle r="10" fill="none" stroke="${c}" stroke-width="1.5"/><path d="M0,-8 L5,5 L-7,-3 L7,-3 L-5,5 Z" fill="none" stroke="${c}" stroke-width="1"/>`
+  };
+  const baseGlyph = elem[suit];
+  // count or court label
+  const label = typeof rank === 'number' ? rank : rank.charAt(0).toUpperCase();
+  return `${baseGlyph}<text x="0" y="-20" text-anchor="middle" font-family="Fraunces, serif" font-size="11" fill="${c}" font-style="italic">${label}</text>`;
+}
+
+function enterReading(){
+  STATE.phase = 'reading';
+  saveHistEntry();
+  render();
+}
+
+// ============================================================
+// PHASE: READING (deep)
+// ============================================================
+function renderReading(){
+  const c = document.getElementById('content');
+  const sp = SPREADS[STATE.spread];
+  
+  let html = `
+    <div class="card altar">
+      <div class="eyebrow">${Tn('Step Four · The Reading','第四步 · 深入解读')}</div>
+      <h2>${Tn(sp.name_en, sp.name_zh)}</h2>
+      ${STATE.intent ? `<div class="intent-recall"><div class="ir-label">${Tn('Your intention:','你的意图：')}</div><div class="ir-body">${escapeHtml(STATE.intent)}</div></div>` : ''}
+    </div>
+  `;
+  
+  // Each card's deep reading
+  STATE.drawn.forEach((card, i)=>{
+    const pos = sp.positions[i];
+    html += renderCardReading(card, pos, i);
+  });
+  
+  // Cross-framework synthesis
+  html += `<div class="card synthesis">
+    <div class="eyebrow">${Tn('The Synthesis · Beyond the Cards','综合解读 · 牌之外')}</div>
+    <h2>${Tn('What these cards say together, across your other frameworks','这些牌合在一起、跨越你其他框架在说什么')}</h2>
+    
+    <div class="syn-block">
+      <div class="syn-head">${Tn('PERMA Lens · Pillars of Wellbeing','PERMA 之透镜 · 幸福之五支柱')}</div>
+      <p>${permaSummary(STATE.drawn, LANG)}</p>
+    </div>
+    
+    <div class="syn-block">
+      <div class="syn-head">${Tn('Gallup Strengths Lens','盖洛普优势之透镜')}</div>
+      <p>${csfSummary(STATE.drawn, LANG)}</p>
+    </div>
+    
+    <div class="combo-grid">
+      <div class="combo-cell">
+        <h3>${Tn('Elemental weather','元素天气')}</h3>
+        <p>${elementalBalance(STATE.drawn, LANG)}</p>
+      </div>
+      <div class="combo-cell">
+        <h3>${Tn('Scale of the work','课题的尺度')}</h3>
+        <p>${majorMinorMix(STATE.drawn, LANG)}</p>
+      </div>
+    </div>
+    
+    ${narrativeThread(STATE.drawn, LANG) ? `<div class="syn-block">
+      <div class="syn-head">${Tn('From first card to last','从第一张到末张')}</div>
+      <p>${narrativeThread(STATE.drawn, LANG)}</p>
+    </div>` : ''}
+    
+    <div class="practice">
+      <div class="practice-k">${Tn('One practice for the whole spread','整副牌阵的一个练习')}</div>
+      <div class="practice-v">${firstPractice(STATE.drawn, LANG) || Tn('Write the question. Carry it.','写下那个问题。带着它走。')}</div>
+    </div>
+  `;
+  
+  const shadow = shadowReflection(STATE.drawn, LANG);
+  if (shadow){
+    html += `<div class="syn-block shadow-block">
+      <div class="syn-head">${shadow.head}</div>
+      <div class="syn-body">${shadow.body.replace(/\n\n/g, '</p><p>').replace(/^/, '<p>').replace(/$/, '</p>')}</div>
+    </div>`;
+  }
+  
+  const values = valuesReflection(STATE.drawn, LANG);
+  if (values){
+    html += `<div class="syn-block values-block">
+      <div class="syn-head">${values.head}</div>
+      <div class="syn-body">${values.body.replace(/\n\n/g, '</p><p>').replace(/^/, '<p>').replace(/$/, '</p>')}</div>
+    </div>`;
+  }
+  
+  html += `</div>`;
+  
+  // Closing — daily ritual
+  html += `<div class="card closing">
+    <div class="eyebrow">${Tn('Step Five · Carry the Question','第五步 · 带着问题前行')}</div>
+    <h2>${Tn('A closing ritual','收束的仪式')}</h2>
+    <p>${Tn(
+      "Before closing this page, do one small thing: write down on paper (yes, paper) the single question or image from today's reading that most caught you. Carry it through the day. At evening, return to it for two minutes and notice what showed up.",
+      "在关闭此页之前，做一件小事：在纸上（是的，纸上）写下今日解读中最抓住你的那一个问题或图像。让它陪你度过这一天。傍晚，回到它两分钟，留意今日有什么显形。"
+    )}</p>
+    <p class="quiet">${Tn(
+      "The cards have done their work as soon as they have caused you to look. Whether anything 'comes true' is beside the point — the looking itself is the practice.",
+      "牌的工作，在它使你看向某处的那一刻就已完成。是否有什么'应验'并不要紧——'看向'本身就是修行。"
+    )}</p>
+    <div class="btnrow">
+      <button class="btn" onclick="resetTool()">${Tn('Draw Again','再次抽牌')}</button>
+      <button class="btn ghost" onclick="copyShare()">${Tn('Copy link to this reading','复制本次解读链接')}</button>
+      <button class="btn ghost" onclick="copyReadingText()">${Tn('Copy card list','复制牌名')}</button>
+      <button class="btn ghost" onclick="window.print()">${Tn('Save as PDF','存为 PDF')}</button>
+    </div>
+  </div>`;
+  
+  c.innerHTML = html;
+}
+
+function renderCardReading(card, position, index){
+  const isMajor = card.type === "major";
+  const isReversed = card.reversed;
+  const color = isMajor ? '#c9a227' :
+    card.suit === 'wands' ? '#c45c3a' :
+    card.suit === 'cups' ? '#4a6cc4' :
+    card.suit === 'swords' ? '#d4a017' :
+    '#2e9e7f';
+  
+  let title, archetype, mainBody, shadowBody, questionLine, mantraLine, elementLine, permaLine, csfLine;
+  
+  if (isMajor){
+    const data = getCardData(card);
+    title = `${data.n}. ${Tn(data.en, data.zh)}`;
+    archetype = Tn(data.archetype_en, data.archetype_zh);
+    if (isReversed){
+      mainBody = Tn(data.shadow_en, data.shadow_zh);
+      shadowBody = Tn(data.upright_en, data.upright_zh);
+    } else {
+      mainBody = Tn(data.upright_en, data.upright_zh);
+      shadowBody = Tn(data.shadow_en, data.shadow_zh);
+    }
+    questionLine = Tn(data.question_en, data.question_zh);
+    mantraLine = Tn(data.mantra_en, data.mantra_zh);
+    const elem = ELEMENTS[data.element];
+    elementLine = `${Tn(elem.en, elem.zh)} · ${Tn(elem.trait_en, elem.trait_zh)}  ${Tn('|','|')}  ${data.astro}`;
+    permaLine = `${Tn(PERMA_LABELS[data.perma].en, PERMA_LABELS[data.perma].zh)}`;
+    csfLine = `${Tn(CSF_LABELS[data.csf].en, CSF_LABELS[data.csf].zh)}`;
+  } else {
+    const reading = minorReading(card, isReversed, LANG);
+    title = reading.head;
+    archetype = Tn(SUITS[card.suit].domain_en, SUITS[card.suit].domain_zh);
+    mainBody = reading.body;
+    shadowBody = '';
+    if (MINOR_SPECIFIC[card.key]){
+      const spec = MINOR_SPECIFIC[card.key];
+      shadowBody = isReversed ? Tn(spec.upright_en, spec.upright_zh) : Tn(spec.shadow_en, spec.shadow_zh);
+    }
+    questionLine = reading.psych;
+    mantraLine = reading.mantra || '';
+    const elem = ELEMENTS[card.element];
+    elementLine = `${Tn(elem.en, elem.zh)} · ${Tn(elem.trait_en, elem.trait_zh)}`;
+    permaLine = `${Tn(PERMA_LABELS[card.perma].en, PERMA_LABELS[card.perma].zh)}`;
+    csfLine = `${Tn(CSF_LABELS[card.csf].en, CSF_LABELS[card.csf].zh)}`;
+  }
+  
+  return `<div class="card reading-card" style="border-left:4px solid ${color}">
+    <div class="rc-position">
+      <span class="rc-num">${index + 1}</span>
+      <span class="rc-pos-name">${Tn(position.en, position.zh)}</span>
+      <span class="rc-orient ${isReversed?'reversed':''}">${isReversed ? Tn('REVERSED · Shadow Face','逆位 · 阴影面') : Tn('UPRIGHT · Light Face','正位 · 光明面')}</span>
+    </div>
+    <h2 class="rc-title">${title}</h2>
+    ${archetype ? `<div class="rc-archetype">${archetype}</div>` : ''}
+    
+    <div class="rc-position-prompt">${Tn(position.prompt_en, position.prompt_zh)}</div>
+    
+    <div class="rc-main">${mainBody}</div>
+    
+    ${shadowBody ? `<details class="rc-shadow-toggle">
+      <summary>${isReversed 
+        ? Tn('What this card looks like upright (for contrast)', '此牌正位时的样貌（作为对照）')
+        : Tn('The shadow face (read for integration)', '阴影面（用于整合）')}</summary>
+      <div class="rc-shadow-body">${shadowBody}</div>
+    </details>` : ''}
+    
+    <div class="rc-meta">
+      <div class="rc-meta-row"><span class="rc-meta-k">${Tn('Element','元素')}</span><span class="rc-meta-v">${elementLine}</span></div>
+      <div class="rc-meta-row"><span class="rc-meta-k">${Tn('PERMA','PERMA')}</span><span class="rc-meta-v">${permaLine}</span></div>
+      <div class="rc-meta-row"><span class="rc-meta-k">${Tn('Gallup Domain','盖洛普领域')}</span><span class="rc-meta-v">${csfLine}</span></div>
+    </div>
+    
+    ${questionLine ? `<div class="rc-question">
+      <div class="rc-q-label">${Tn('Sit with this question','与这个问题静坐')}</div>
+      <div class="rc-q-body">${questionLine}</div>
+    </div>` : ''}
+    
+    ${mantraLine ? `<div class="practice"><div class="practice-k">${Tn("Today's small practice","今日的微小练习")}</div><div class="practice-v">${mantraLine}</div></div>` : ''}
+    ${mantraLine ? `<div class="rc-mantra">${mantraLine}</div>` : ''}
+  </div>`;
+}
+
+function resetTool(){
+  STATE = {
+    phase: 'intent',
+    spread: STATE.spread, // keep last spread choice
+    intent: '',
+    shuffled: [],
+    drawn: [],
+    revealedIdx: -1
+  };
+  render();
+}
+
+// ============================================================
+// ROUTER
+// ============================================================
+function render(){
+  if (STATE.phase === 'intent') renderIntent();
+  else if (STATE.phase === 'shuffle') renderShuffle();
+  else if (STATE.phase === 'reading') renderReading();
+}
+
+function escapeHtml(s){
+  return String(s).replace(/[&<>"']/g, ch => 
+    ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
+}
+
+window.addEventListener('DOMContentLoaded', ()=>{
+  if (!tryLoadShare()) render();
+  else render();
+});
+
+</script>
 </body>
 </html>
