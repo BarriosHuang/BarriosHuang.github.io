@@ -1,1 +1,112 @@
-PLACEHOLDER
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Work of Days · Tarot for Self-Reflection · 日课塔罗</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;0,9..144,600;1,9..144,400&family=Noto+Serif+SC:wght@300;400;600&family=Spline+Sans+Mono:wght@400;500&display=swap');
+:root{--bg:#13110e;--bg2:#1b1813;--panel:#211d17;--panel2:#2a251d;--ink:#ece3d4;--ink-dim:#b3a890;--line:#3a3328;--gold:#c9a227;--ex:#c45c3a;--in:#d4a017;--rb:#2e9e7f;--st:#4a6cc4;--shadow-violet:#7d6ca8;--serif:'Fraunces',Georgia,serif;--sc:'Noto Serif SC',serif;--mono:'Spline Sans Mono',monospace;}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:radial-gradient(900px 600px at 85% -5%,rgba(201,162,39,.08),transparent 60%),radial-gradient(700px 500px at 0% 100%,rgba(74,108,196,.05),transparent 55%),var(--bg);color:var(--ink);font-family:var(--serif);line-height:1.65;min-height:100vh;-webkit-font-smoothing:antialiased}
+body.zh{font-family:var(--sc);line-height:1.85}
+.wrap{max-width:880px;margin:0 auto;padding:34px 22px 80px;position:relative;z-index:2}
+header.mast{border-bottom:1px solid var(--line);padding-bottom:24px;margin-bottom:26px}
+.kicker{font-family:var(--mono);font-size:11px;letter-spacing:.32em;text-transform:uppercase;color:var(--gold)}
+h1.title{font-weight:300;font-size:clamp(30px,5.5vw,46px);line-height:1.04;letter-spacing:-.02em;margin:10px 0 6px}
+h1.title em{font-style:italic;color:var(--gold)}
+.zh-sub{font-family:var(--sc);font-size:14px;color:var(--ink-dim);margin-top:4px}
+.sub{color:var(--ink-dim);font-size:14.5px;max-width:62ch;margin-top:10px}
+.langtoggle{position:fixed;top:14px;right:14px;z-index:30;display:flex;border:1px solid var(--line);border-radius:30px;overflow:hidden;background:var(--panel);font-family:var(--mono);font-size:12px}
+.langtoggle button{background:none;border:none;color:var(--ink-dim);padding:7px 14px;cursor:pointer}
+.langtoggle button.on{background:var(--gold);color:#1a1710;font-weight:500}
+.card{background:linear-gradient(180deg,var(--panel),var(--bg2));border:1px solid var(--line);border-radius:14px;padding:26px;margin-bottom:20px}
+.card h2{font-weight:400;font-size:24px;margin:4px 0 8px}
+.zh-h{font-family:var(--sc);font-size:14.5px;color:var(--ink-dim);margin-bottom:16px}
+.eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin-bottom:6px}
+textarea{width:100%;background:var(--bg);border:1px solid var(--line);color:var(--ink);font-family:var(--serif);font-size:15px;padding:14px;border-radius:10px;resize:vertical;min-height:90px;margin:14px 0}
+textarea:focus{outline:none;border-color:var(--gold)}
+.btn{display:inline-flex;align-items:center;background:var(--gold);color:#1a1710;border:none;font-family:var(--serif);font-weight:500;font-size:15px;padding:12px 24px;border-radius:30px;cursor:pointer}
+.btn.ghost{background:none;border:1px solid var(--line);color:var(--ink)}
+.spread-section{margin:24px 0 8px}
+.spread-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px;margin-top:10px}
+.spread-card{background:var(--bg);border:1px solid var(--line);color:var(--ink);text-align:left;padding:14px;border-radius:11px;cursor:pointer;font-family:inherit;display:flex;flex-direction:column;gap:5px}
+.spread-card.sel{border-color:var(--gold);background:rgba(201,162,39,.08)}
+.sp-cards{font-family:var(--mono);color:var(--gold);font-size:13px}
+.sp-name{font-size:15px;font-weight:500}
+.sp-intent{font-size:12.5px;color:var(--ink-dim)}
+.intent-recall{background:rgba(201,162,39,.06);border-left:3px solid var(--gold);padding:10px 14px;margin:14px 0}
+.ir-label{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--gold)}
+.cards-row{display:flex;justify-content:center;gap:18px;flex-wrap:wrap;padding:30px 0}
+.card-slot{display:flex;flex-direction:column;align-items:center;gap:8px;min-width:110px;max-width:140px}
+.slot-num{font-family:var(--mono);color:var(--gold);font-size:11px;border:1px solid var(--gold);border-radius:50%;width:22px;height:22px;line-height:20px;display:inline-block}
+.slot-name{font-size:12px;color:var(--ink-dim);font-family:var(--mono)}
+.card-img{width:110px;height:176px;cursor:pointer}
+.card-img.reversed.revealed > .card-face{transform:rotate(180deg)}
+.card-face{background:linear-gradient(180deg,var(--panel),var(--bg2));border-radius:6px;border:2px solid;padding-bottom:24px;position:relative}
+.card-label{position:absolute;bottom:6px;left:50%;transform:translateX(-50%);font-size:11px;text-align:center;width:90%}
+.hint{text-align:center;color:var(--ink-dim);font-style:italic;margin-top:20px;font-size:13.5px}
+.reading-card{padding-left:30px}
+.rc-position{display:flex;align-items:center;gap:10px;flex-wrap:wrap;font-family:var(--mono);font-size:11px;margin-bottom:8px}
+.rc-num{background:var(--gold);color:#1a1710;padding:2px 9px;border-radius:12px;font-weight:600}
+.rc-pos-name{color:var(--ink-dim);letter-spacing:.16em;text-transform:uppercase}
+.rc-orient{margin-left:auto;padding:3px 10px;border-radius:12px;background:rgba(201,162,39,.1);color:var(--gold)}
+.rc-orient.reversed{background:rgba(125,108,168,.15);color:var(--shadow-violet)}
+.rc-title{font-size:26px;font-weight:400;margin:4px 0}
+.rc-archetype{font-family:var(--sc);font-style:italic;color:var(--gold);font-size:14px;margin-bottom:14px}
+.rc-position-prompt{font-style:italic;color:var(--ink-dim);font-size:14px;border-left:2px solid var(--line);padding-left:14px;margin:10px 0 16px}
+.rc-main{font-size:15.5px;line-height:1.75;margin-bottom:18px}
+.rc-shadow-toggle{margin:16px 0;border:1px solid var(--line);border-radius:9px}
+.rc-shadow-toggle summary{padding:10px 14px;cursor:pointer;color:var(--shadow-violet);font-family:var(--mono);font-size:12px;list-style:none}
+.rc-shadow-body{padding:0 14px 14px;color:var(--ink-dim);font-size:14px}
+.rc-meta{display:flex;flex-direction:column;gap:6px;margin:14px 0;padding:12px 14px;background:var(--bg);border-radius:8px;border:1px solid var(--line)}
+.rc-meta-row{display:flex;gap:14px;font-size:13px}
+.rc-meta-k{font-family:var(--mono);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);min-width:120px}
+.rc-meta-v{color:var(--ink-dim)}
+.rc-question{background:rgba(46,158,127,.08);border-left:3px solid var(--rb);padding:12px 16px;margin:16px 0 12px}
+.rc-q-label{font-family:var(--mono);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--rb)}
+.rc-q-body{font-size:15px;font-style:italic}
+.rc-mantra{text-align:center;font-style:italic;font-size:18px;color:var(--gold);margin:14px 0 0}
+.syn-head{font-family:var(--mono);font-size:11.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--gold);margin-bottom:6px}
+.shadow-block{background:rgba(125,108,168,.06);border-left:3px solid var(--shadow-violet);padding:14px 18px}
+.values-block{background:rgba(74,108,196,.06);border-left:3px solid var(--st);padding:14px 18px}
+footer{margin-top:42px;border-top:1px solid var(--line);padding-top:20px;color:var(--ink-dim);font-size:12.5px}
+.note{font-family:var(--mono);font-size:11px;line-height:1.75}
+.hist-list{display:flex;flex-direction:column;gap:8px;margin-top:10px}
+.hist-item{padding:10px 12px;border:1px solid var(--line);border-radius:10px;background:var(--bg);cursor:pointer;text-align:left;color:inherit;font:inherit;width:100%}
+.hist-meta{font-family:var(--mono);font-size:11px;color:var(--gold)}
+.hist-intent{font-size:13px;color:var(--ink-dim);margin-top:3px}
+.combo-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:8px}
+@media(max-width:640px){.combo-grid{grid-template-columns:1fr}}
+.combo-cell{background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:12px 14px}
+.combo-cell h3{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);font-weight:400;margin-bottom:6px}
+.combo-cell p{font-size:13.5px;color:var(--ink-dim)}
+.practice{background:rgba(201,162,39,.07);border:1px dashed var(--gold);border-radius:10px;padding:12px 14px;margin:14px 0 4px}
+.practice-k{font-family:var(--mono);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);margin-bottom:4px}
+.btnrow{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}
+.toast{position:fixed;bottom:22px;left:50%;transform:translateX(-50%);background:var(--gold);color:#1a1710;padding:8px 16px;border-radius:20px;font-family:var(--mono);font-size:12px;z-index:50;opacity:0;pointer-events:none;transition:opacity .25s}
+.toast.show{opacity:1}
+@media print{.langtoggle,.btn,textarea{display:none!important}body{background:#fff;color:#111}}
+</style>
+</head>
+<body>
+<div class="langtoggle">
+  <button id="btn-en" class="on" onclick="setLang('en')">EN</button>
+  <button id="btn-zh" onclick="setLang('zh')">中文</button>
+</div>
+<div class="wrap">
+<header class="mast">
+  <div class="kicker">Tarot × Self-Reflection · Offline · 78-Card Rider-Waite</div>
+  <h1 class="title">The Work of <em>Days</em></h1>
+  <div class="zh-sub">日课塔罗 · 自我反思之具 · 完整 78 张</div>
+  <p class="sub">Seventy-eight cards, each with its own reading. The cards are honest randomization; the reading connects to PERMA, Gallup strengths, shadow material, and values. Light face: what wants to emerge. Shadow face: what wants integration.</p>
+</header>
+<div id="content"></div>
+<footer>
+  <p class="note">Self-reflection tool · Rider-Waite-Smith · runs entirely in your browser · no data leaves this page.</p>
+</footer>
+</div>
+<script src="cards.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
